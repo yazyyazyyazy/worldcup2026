@@ -457,7 +457,20 @@ document.getElementById('shareBtn').addEventListener('click',()=>{shareMode='up'
 document.getElementById('champShare').addEventListener('click',()=>{shareMode='champs';renderShare();document.getElementById('shareModal').classList.add('show');});
 
 /* ===== INIT ===== */
-renderAll(); applyT();
+async function syncResults(){
+ try{
+  const r=await fetch('./results.json?t='+Date.now(),{cache:'no-store'});
+  if(!r.ok) return;
+  const data=await r.json();
+  if(data&&data.results){
+   let changed=false;
+   for(const k in data.results){ if(RESULTS[k]!==data.results[k]){ RESULTS[k]=data.results[k]; changed=true; } }
+   if(data.updated) UPDATED_THROUGH=data.updated;
+   if(changed) renderAll(); else renderStandings();
+  }
+ }catch(e){ /* no results.json yet, or opened as a local file — baked-in results stay */ }
+}
+renderAll(); applyT(); syncResults(); setInterval(syncResults, 120000);
 </script>
 </body>
 </html>
