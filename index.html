@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <title>World Cup '26</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -478,7 +481,26 @@ async function syncResults(){
   }
  }catch(e){ /* no results.json yet, or opened as a local file — baked-in results stay */ }
 }
+/* ===== AUTO-FRESHNESS =====
+   GitHub Pages caches the HTML, so returning visitors can get a stale copy.
+   This quietly checks for a newer build and reloads once when it finds one. */
+const BUILD='2026-06-29-valini-ladybug-1';  // bump this string on every deploy
+async function checkVersion(){
+ try{
+  const r=await fetch('./index.html?cb='+Date.now(),{cache:'no-store'});
+  if(!r.ok) return;
+  const txt=await r.text();
+  const m=txt.match(/const BUILD='([^']+)'/);
+  if(m && m[1] && m[1]!==BUILD){
+   if(sessionStorage.getItem('wc26_reloadedFor')!==m[1]){
+    sessionStorage.setItem('wc26_reloadedFor',m[1]);
+    location.reload();
+   }
+  }
+ }catch(e){}
+}
 renderAll(); applyT(); syncResults(); setInterval(syncResults, 120000);
+setTimeout(checkVersion, 8000); setInterval(checkVersion, 180000);
 </script>
 </body>
 </html>
