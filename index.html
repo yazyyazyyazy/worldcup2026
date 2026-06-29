@@ -105,6 +105,9 @@
   .upsetcard .ucall{margin-top:10px; font-size:13.5px; font-weight:700; background:#fff0f3; border:1.5px solid #f3c9d4; border-radius:10px; padding:8px 10px; color:var(--coral2)}
   .upsetcard.hit{border-color:#E9B84A; box-shadow:0 0 0 2px rgba(233,184,74,.4), 3px 3px 0 rgba(70,55,38,.09)}
   .uphit{margin-top:8px; font-family:var(--pixel); font-size:13px; color:#A9760A; display:flex; align-items:center; gap:6px; background:#FFF6D6; border:1.5px solid #EBD27A; border-radius:9px; padding:5px 9px; width:max-content}
+  .upsetcard.noble{background:linear-gradient(180deg,#FFFBEF,#FFF3D4); border-color:#E9C766; box-shadow:0 2px 14px rgba(224,168,46,.18)}
+  .uphit.noble{background:#FFEFBE; border-color:#E0A82E; color:#9A6B0A}
+  .udtag{margin-top:8px; font-family:var(--pixel); font-size:12px; color:#A9760A; background:#FFF6D6; border:1.5px solid #EBD27A; border-radius:9px; padding:4px 9px; width:max-content}
   .uphit .st{animation:twinkle 1.4s ease-in-out infinite}
   @keyframes twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.7}}
   .upsetcard .ucall b{color:var(--ink)}
@@ -301,7 +304,7 @@ function renderBracket(){
 /* ===== PANELS ===== */
 function renderLegend(){document.getElementById('legend').innerHTML=PEOPLE.map(p=>`<span class="who">${critSVG(p.crit)}${p.name}</span>`).join('');}
 function renderChamps(){document.getElementById('champGrid').innerHTML=PEOPLE.map(p=>{const ch=pick(p,'fin');const row=ch?`<span class="lab">CHAMPION</span><span class="flag holo" style="width:34px;height:23px"><svg viewBox="0 0 24 16" width="34" height="23">${flagInner(ch)}</svg></span><span class="team">${TEAMS[ch]}</span>`:`<span class="lab">CHAMPION</span><span class="team" style="color:#9c8a72">still cooking their bracket 🦉</span>`;return `<div class="pcard"><div class="top">${critSVG(p.crit)}<div><div class="nm">${p.name}</div><div class="role">the ${CRIT_LABEL[p.crit]||'critter'}</div></div></div><div class="champrow">${row}</div></div>`;}).join('');}
-function renderUpsets(){document.getElementById('upsetGrid').innerHTML=PEOPLE.map(p=>{const hit=p.upKey&&RESULTS[p.upKey]===p.upTeam;const badge=hit?`<div class="uphit"><span class="st">⭐</span> called it!</div>`:'';return `<div class="pcard upsetcard${hit?' hit':''}"><div class="top">${critSVG(p.crit)}<div><div class="nm">${p.name}</div><div class="role">biggest-shock call</div></div></div><div class="ucall">${p.upset||'—'}</div>${badge}</div>`;}).join('');}
+function renderUpsets(){document.getElementById('upsetGrid').innerHTML=PEOPLE.map(p=>{const isM=p.id==='p_maame';const hit=p.upKey&&RESULTS[p.upKey]===p.upTeam;const badge=hit?(isM?`<div class="uphit noble"><span class="st">👑</span> the underdog queen called it!</div>`:`<div class="uphit"><span class="st">⭐</span> called it!</div>`):'';const tag=isM?`<div class="udtag">🐸 rooting for the underdogs</div>`:'';return `<div class="pcard upsetcard${hit?' hit':''}${isM?' noble':''}"><div class="top">${critSVG(p.crit)}<div><div class="nm">${p.name}</div><div class="role">biggest-shock call</div></div></div><div class="ucall">${p.upset||'—'}</div>${tag}${badge}</div>`;}).join('');}
 function renderStandings(){const rows=PEOPLE.map(p=>({p,pts:pointsFor(p)})).sort((a,b)=>b.pts-a.pts);document.getElementById('standTable').innerHTML=`<tr><th></th><th>Player</th><th>Champion pick</th><th style="text-align:right">Pts</th></tr>`+rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td><div class="nmcell">${critSVG(r.p.crit)}${r.p.name}</div></td><td>${pick(r.p,'fin')?TEAMS[pick(r.p,'fin')]:'<span style="color:#9c8a72">still picking…</span>'}</td><td class="pts">${r.pts}</td></tr>`).join('');document.getElementById('kickNote').textContent='Updated through '+UPDATED_THROUGH+'. Points recompute automatically as each result lands.';}
 function renderAll(){renderBracket();renderLegend();renderChamps();renderUpsets();renderStandings();}
 
@@ -354,7 +357,7 @@ document.getElementById('musicBtn').addEventListener('click',function(){
 function cardFlag(code,x,y,w){const s=w/24;return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-0.8" y="-0.8" width="25.6" height="17.6" rx="2" fill="#463726"/>${flagInner(code)}</g>`;}
 function cardCrit(t,x,y,sc){return `<g transform="translate(${x},${y}) scale(${sc})">${CRIT[t]||CRIT.cat}</g>`;}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function frame(w,h,inner,gid){return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" font-family="Arial,Helvetica,sans-serif"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BCE4F5"/><stop offset="0.34" stop-color="#A6DBD2"/><stop offset="0.62" stop-color="#FCE6BE"/><stop offset="1" stop-color="#F2C2CE"/></linearGradient><radialGradient id="${gid}s" cx="0.5" cy="0.04" r="0.6"><stop offset="0" stop-color="#FFF6D6" stop-opacity="0.95"/><stop offset="1" stop-color="#FFF6D6" stop-opacity="0"/></radialGradient></defs><rect width="${w}" height="${h}" fill="url(#${gid})"/><rect width="${w}" height="${h}" fill="url(#${gid}s)"/><rect x="7" y="7" width="${w-14}" height="${h-14}" rx="24" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.75"/>${inner}<text x="${w-26}" y="${h-22}" text-anchor="end" font-size="19" font-weight="800" fill="#C75C52">WORLD CUP '26</text></svg>`;}
+function frame(w,h,inner,gid,noble){const border=noble?'#E0A82E':'#ffffff';const goldDef=noble?`<radialGradient id="${gid}g" cx="0.5" cy="0" r="0.95"><stop offset="0" stop-color="#FFE6A0" stop-opacity="0.6"/><stop offset="1" stop-color="#FFE6A0" stop-opacity="0"/></radialGradient>`:'';const goldTint=noble?`<rect width="${w}" height="${h}" fill="url(#${gid}g)"/>`:'';const innerRing=noble?`<rect x="15" y="15" width="${w-30}" height="${h-30}" rx="19" fill="none" stroke="#E0A82E" stroke-width="1.5" opacity="0.55"/>`:'';return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" font-family="Arial,Helvetica,sans-serif"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BCE4F5"/><stop offset="0.34" stop-color="#A6DBD2"/><stop offset="0.62" stop-color="#FCE6BE"/><stop offset="1" stop-color="#F2C2CE"/></linearGradient><radialGradient id="${gid}s" cx="0.5" cy="0.04" r="0.6"><stop offset="0" stop-color="#FFF6D6" stop-opacity="0.95"/><stop offset="1" stop-color="#FFF6D6" stop-opacity="0"/></radialGradient>${goldDef}</defs><rect width="${w}" height="${h}" fill="url(#${gid})"/><rect width="${w}" height="${h}" fill="url(#${gid}s)"/>${goldTint}<rect x="7" y="7" width="${w-14}" height="${h-14}" rx="24" fill="none" stroke="${border}" stroke-width="4" opacity="${noble?'0.95':'0.75'}"/>${innerRing}${inner}<text x="${w-26}" y="${h-22}" text-anchor="end" font-size="19" font-weight="800" fill="#C75C52">WORLD CUP '26</text></svg>`;}
 function joinNames(a){if(!a.length)return 'nobody';if(a.length===1)return a[0];if(a.length===2)return a[0]+' & '+a[1];return a.slice(0,-1).join(', ')+' & '+a[a.length-1];}
 function backers(mid,team){return PEOPLE.filter(p=>pick(p,mid)===team);}
 
@@ -417,8 +420,26 @@ function matchCardUpcoming(mid,a,b){const w=900,h=600;const A=backers(mid,a),B=b
   ${crewRow(B,640,390,1.3)}<text x="640" y="432" text-anchor="middle" font-size="18" font-weight="800" fill="#463726">${esc(TEAMS[b])} · ${B.length}</text>`;
  return {svg:frame(w,h,inner,'gmu'),w,h,file:'wc26-'+mid+'-preview.png',title:head};}
 
+const FAVORITES=new Set(['BRA','ARG','FRA','ESP','ENG','GER','POR','NED','BEL']);
+const isUnderdog=(t)=>!FAVORITES.has(t);
+function crownSVG(cx,cy,s){return `<g transform="translate(${cx},${cy}) scale(${s})"><path d="M-46 14 L-46 -2 L-26 12 L-13 -16 L0 8 L13 -16 L26 12 L46 -2 L46 14 Z" fill="#F4C430" stroke="#B8860B" stroke-width="2.5" stroke-linejoin="round"/><circle cx="-13" cy="-15" r="3.6" fill="#E0564E"/><circle cx="13" cy="-15" r="3.6" fill="#E0564E"/><circle cx="0" cy="7" r="3.6" fill="#D86A92"/><rect x="-46" y="12" width="92" height="6" rx="2" fill="#E0A82E"/></g>`;}
+function nobleResultCard(mid,winner,loser,right,wrong){const w=900,h=600;
+ const pool=[`Maame called it. bow to the underdog queen.`,`the underdog whisperer strikes again`,`Maame believed when nobody else did`,`never bet against Maame's underdog radar`,`the people doubted. Maame did not.`];
+ const head=pool[hsh(mid+'noble')%pool.length];const lines=wrap(head,26);const lh=34;const sy=118-(lines.length-1)*lh/2;
+ const fw=230,fx=335,fy=272,fh=Math.round(fw*16/24);
+ const inner=`<text x="450" y="48" text-anchor="middle" font-size="19" font-weight="800" fill="#A9760A">★  UNDERDOG  CALLED  ★</text>
+  ${crownSVG(185,306,0.42)}${cardCrit('frog',185,338,2.4)}
+  <text text-anchor="middle" font-size="27" font-weight="800" fill="#7a531a">${tspans(lines,450,sy,lh)}</text>
+  <text x="450" y="${sy+(lines.length-1)*lh+28}" text-anchor="middle" font-size="17" font-weight="700" fill="#8a6a2e">${esc(TEAMS[winner])} shocked ${esc(TEAMS[loser])}</text>
+  ${crownSVG(450,248,0.95)}
+  <rect x="${fx-6}" y="${fy-6}" width="${fw+12}" height="${fh+12}" rx="10" fill="none" stroke="#E0A82E" stroke-width="6"/>${cardFlag(winner,fx,fy,fw)}
+  <text x="450" y="${fy+fh+48}" text-anchor="middle" font-size="20" font-weight="800" fill="#2f7a3a">✓ called it: ${esc(joinNames(right.map(p=>p.name)))}</text>
+  <text x="450" y="${fy+fh+80}" text-anchor="middle" font-size="20" font-weight="800" fill="#C75C52">✗ missed it: ${esc(joinNames(wrong.map(p=>p.name)))}</text>`;
+ return {svg:frame(w,h,inner,'gnb',true),w,h,file:'wc26-'+mid+'-noble.png',title:head};}
 function matchCardResult(mid,a,b,winner){const w=900,h=600;const loser=winner===a?b:a;
  const right=backers(mid,winner),wrong=backers(mid,loser);
+ const maameRight=right.some(p=>p.id==='p_maame');
+ if(maameRight && (isUnderdog(winner) || right.length<=2)) return nobleResultCard(mid,winner,loser,right,wrong);
  const head=resultLine(mid,winner,loser);const lines=wrap(head,32);const lh=34;const sy=112-(lines.length-1)*lh/2;
  const fw=260,fx=320,fy=234,fh=Math.round(fw*16/24);
  const inner=`<text x="450" y="50" text-anchor="middle" font-size="20" font-weight="800" fill="#C75C52">FULL-TIME</text>
@@ -503,7 +524,7 @@ async function syncResults(){
 /* ===== AUTO-FRESHNESS =====
    GitHub Pages caches the HTML, so returning visitors can get a stale copy.
    This quietly checks for a newer build and reloads once when it finds one. */
-const BUILD='2026-06-29-upset-star-7';  // bump this string on every deploy
+const BUILD='2026-06-29-maame-noble-8';  // bump this string on every deploy
 async function checkVersion(){
  try{
   const r=await fetch('./index.html?cb='+Date.now(),{cache:'no-store'});
