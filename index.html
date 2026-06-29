@@ -306,7 +306,7 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{doc
 
 /* ===== ZOOM / PAN ===== */
 const bv=document.getElementById('bv'),stage=document.getElementById('bvstage');
-let zoom=1,px=0,py=0,drag=false,lastX=0,lastY=0;
+let zoom=1,px=0,py=0;
 function applyT(){
  zoom=Math.max(1,Math.min(6,zoom));
  const w=bv.clientWidth,h=bv.clientHeight;
@@ -320,10 +320,16 @@ function zoomAt(factor,cx,cy){const w=bv.clientWidth;const oldEff=(w/1048)*zoom;
 function defaultView(){const w=bv.clientWidth||0;const base=w/1048;/* on phones, open partly zoomed so tiles are readable; on wide screens this clamps to fit-whole */zoom=Math.max(1,Math.min(6,0.85/base));px=0;py=0;applyT();}
 document.querySelectorAll('.zoomctl button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const z=b.dataset.z;if(z==='in')zoomAt(1.35);else if(z==='out')zoomAt(1/1.35);else{zoom=1;px=0;py=0;applyT();}}));
 bv.addEventListener('wheel',e=>{e.preventDefault();const r=bv.getBoundingClientRect();const step=Math.min(Math.abs(e.deltaY),40)/40;const f=1+0.05*step;zoomAt(e.deltaY<0?f:1/f,e.clientX-r.left,e.clientY-r.top);},{passive:false});
-bv.addEventListener('pointerdown',e=>{if(e.target.closest('.zoomctl'))return;drag=true;bv.classList.add('drag');lastX=e.clientX;lastY=e.clientY;bv.setPointerCapture(e.pointerId);});
-bv.addEventListener('pointermove',e=>{if(!drag)return;px+=e.clientX-lastX;py+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;applyT();});
-bv.addEventListener('pointerup',e=>{drag=false;bv.classList.remove('drag');});
-bv.addEventListener('pointercancel',()=>{drag=false;bv.classList.remove('drag');});
+const ptrs=new Map(); let pinchPrev=0;
+function pinchDist(){const a=[...ptrs.values()];if(a.length<2)return 0;return Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);}
+function pinchMid(){const a=[...ptrs.values()];return {x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2};}
+bv.addEventListener('pointerdown',e=>{if(e.target.closest('.zoomctl'))return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});try{bv.setPointerCapture(e.pointerId);}catch(_){}bv.classList.add('drag');if(ptrs.size===2)pinchPrev=pinchDist();});
+bv.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;const prev=ptrs.get(e.pointerId);
+ if(ptrs.size===1){px+=e.clientX-prev.x;py+=e.clientY-prev.y;applyT();ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});}
+ else if(ptrs.size===2){ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});const d=pinchDist();if(pinchPrev>0&&d>0){const r=bv.getBoundingClientRect();const m=pinchMid();zoomAt(d/pinchPrev,m.x-r.left,m.y-r.top);}pinchPrev=d;}});
+function endPtr(e){if(ptrs.has(e.pointerId))ptrs.delete(e.pointerId);if(ptrs.size<2)pinchPrev=0;if(ptrs.size===0)bv.classList.remove('drag');}
+bv.addEventListener('pointerup',endPtr);
+bv.addEventListener('pointercancel',endPtr);
 window.addEventListener('resize',applyT);
 
 /* ===== MUSIC (original chiptune) ===== */
@@ -493,7 +499,7 @@ async function syncResults(){
 /* ===== AUTO-FRESHNESS =====
    GitHub Pages caches the HTML, so returning visitors can get a stale copy.
    This quietly checks for a newer build and reloads once when it finds one. */
-const BUILD='2026-06-29-mobile-default-zoom-3';  // bump this string on every deploy
+const BUILD='2026-06-29-pinch-zoom-4';  // bump this string on every deploy
 async function checkVersion(){
  try{
   const r=await fetch('./index.html?cb='+Date.now(),{cache:'no-store'});
