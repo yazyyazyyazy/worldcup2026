@@ -1,0 +1,36 @@
+name: Update World Cup results
+
+on:
+  schedule:
+    - cron: '*/20 * * * *'   # every 20 minutes
+  workflow_dispatch:          # lets you run it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch latest results
+        env:
+          FD_TOKEN: ${{ secrets.FD_TOKEN }}
+        run: node scripts/refresh-results.mjs
+
+      - name: Commit if changed
+        run: |
+          if ! git diff --quiet -- results.json; then
+            git config user.name "wc26-bot"
+            git config user.email "wc26-bot@users.noreply.github.com"
+            git add results.json
+            git commit -m "auto: refresh World Cup results"
+            git push
+          else
+            echo "No change in results.json"
+          fi
