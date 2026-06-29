@@ -248,8 +248,8 @@ const PRESETS=[
 let PEOPLE=PRESETS.slice();
 
 /* ===== LIVE RESULTS (edit as games finish) ===== */
-let RESULTS={ m3:'CAN' };  // South Africa 0-1 Canada (final)
-let UPDATED_THROUGH="Jun 28, 2026 · Brazil–Japan kicking off now";
+let RESULTS={};  // start empty — results.json (from the GitHub Action) fills this in
+let UPDATED_THROUGH="waiting on the first results…";
 
 function eliminatedSet(){ const e=new Set(); for(const mid in RESULTS){ const w=RESULTS[mid]; let pair=FIX[mid]?FIX[mid]:(()=>{const[a,b]=TREE[mid];return [RESULTS[a],RESULTS[b]].filter(Boolean);})(); pair.forEach(t=>{if(t&&t!==w)e.add(t);}); } return e; }
 function pointsFor(p){ let s=0; for(const mid in RESULTS){ if(p.picks&&p.picks[mid]===RESULTS[mid]) s+=ROUND_PTS[ROUND_OF[mid]]||0; } return s; }
