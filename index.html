@@ -103,6 +103,10 @@
   .flag{display:inline-block; border:2px solid var(--ink); border-radius:3px; overflow:hidden; vertical-align:middle; box-shadow:0 1px 0 rgba(70,55,38,.25); background:#fff}
   .flag svg{display:block}
   .upsetcard .ucall{margin-top:10px; font-size:13.5px; font-weight:700; background:#fff0f3; border:1.5px solid #f3c9d4; border-radius:10px; padding:8px 10px; color:var(--coral2)}
+  .upsetcard.hit{border-color:#E9B84A; box-shadow:0 0 0 2px rgba(233,184,74,.4), 3px 3px 0 rgba(70,55,38,.09)}
+  .uphit{margin-top:8px; font-family:var(--pixel); font-size:13px; color:#A9760A; display:flex; align-items:center; gap:6px; background:#FFF6D6; border:1.5px solid #EBD27A; border-radius:9px; padding:5px 9px; width:max-content}
+  .uphit .st{animation:twinkle 1.4s ease-in-out infinite}
+  @keyframes twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.7}}
   .upsetcard .ucall b{color:var(--ink)}
 
   table.stand{width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden}
@@ -176,7 +180,7 @@
     <div class="sky-card">
       <table class="stand" id="standTable"></table>
       <div class="kick" id="kickNote"></div>
-      <div class="keybox"><b>Scoring</b> — correct call: reach Round of 16 <b>+1</b> · Quarter-final <b>+2</b> · Semi-final <b>+3</b> · Final <b>+5</b> · Champion <b>+10</b>. Biggest-upset bonus <b>+5</b>.</div>
+      <div class="keybox"><b>Scoring</b> — correct call: reach Round of 16 <b>+1</b> · Quarter-final <b>+2</b> · Semi-final <b>+3</b> · Final <b>+5</b> · Champion <b>+10</b>. Biggest-upset calls don't score — they're just for bragging rights. ⭐</div>
     </div>
   </section>
 </div>
@@ -244,12 +248,12 @@ const ROUND_OF={}; ['m1','m2','m3','m4','m5','m6','m7','m8','m9','m10','m11','m1
 const ROUND_PTS={R32:1,R16:2,QF:3,SF:5,FINAL:10};
 
 const PRESETS=[
- {id:'p_isai',name:'Isai',crit:'cat',color:'#F2935A',upset:'<b>Japan</b> knock out Brazil',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'NED',m5:'CRO',m6:'AUT',m7:'USA',m8:'BEL',m9:'JPN',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'AUS',m15:'ALG',m16:'COL',l1:'GER',l2:'NED',l3:'CRO',l4:'BEL',r1:'NOR',r2:'ENG',r3:'ARG',r4:'ALG',lq1:'GER',lq2:'BEL',rq1:'ENG',rq2:'ARG',lsf:'GER',rsf:'ARG',fin:'ARG'}},
- {id:'p_yazy',name:'Yazy',crit:'bird',color:'#E0A82E',upset:'<b>Ghana</b> over Colombia',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'AUT',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'SUI',m16:'GHA',l1:'FRA',l2:'MAR',l3:'CRO',l4:'SEN',r1:'BRA',r2:'MEX',r3:'ARG',r4:'SUI',lq1:'MAR',lq2:'SEN',rq1:'BRA',rq2:'ARG',lsf:'MAR',rsf:'BRA',fin:'BRA'}},
- {id:'p_blake',name:'Blake',crit:'fish',color:'#6E86B8',upset:'<b>USA</b> reach the quarter-finals',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'COL',l1:'FRA',l2:'MAR',l3:'ESP',l4:'USA',r1:'BRA',r2:'ENG',r3:'ARG',r4:'COL',lq1:'FRA',lq2:'ESP',rq1:'BRA',rq2:'ARG',lsf:'ESP',rsf:'ARG',fin:'ESP'}},
- {id:'p_ninon',name:'Ninon',crit:'ladybug',color:'#D9433C',upset:'<b>Portugal</b> send Croatia home',picks:{m1:'GER',m2:'FRA',m3:'RSA',m4:'NED',m5:'POR',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'COL',l1:'FRA',l2:'NED',l3:'ESP',l4:'SEN',r1:'BRA',r2:'MEX',r3:'ARG',r4:'COL',lq1:'FRA',lq2:'ESP',rq1:'BRA',rq2:'ARG',lsf:'FRA',rsf:'ARG',fin:'FRA'}},
- {id:'p_maame',name:'Maame',crit:'frog',color:'#6FA84F',upset:'<b>Cape Verde</b> topple Argentina',picks:{m1:'PAR',m2:'SWE',m3:'CAN',m4:'NED',m5:'CRO',m6:'AUT',m7:'BIH',m8:'SEN',m9:'BRA',m10:'CIV',m11:'MEX',m12:'COD',m13:'CPV',m14:'EGY',m15:'ALG',m16:'GHA',l1:'PAR',l2:'CAN',l3:'CRO',l4:'SEN',r1:'CIV',r2:'COD',r3:'CPV',r4:'GHA',lq1:'CAN',lq2:'SEN',rq1:'CIV',rq2:'CPV',lsf:'CAN',rsf:'CPV',fin:'CPV'}},
- {id:'p_valini',name:'Valini',crit:'bunny',color:'#D86A92',upset:'<b>Norway</b> knock Brazil out',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'GHA',l1:'FRA',l2:'MAR',l3:'ESP',l4:'SEN',r1:'NOR',r2:'MEX',r3:'ARG',r4:'GHA',lq1:'MAR',lq2:'ESP',rq1:'NOR',rq2:'ARG',lsf:'ESP',rsf:'NOR',fin:'ESP'}}
+ {id:'p_isai',name:'Isai',crit:'cat',color:'#F2935A',upset:'<b>Japan</b> knock out Brazil',upKey:'m9',upTeam:'JPN',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'NED',m5:'CRO',m6:'AUT',m7:'USA',m8:'BEL',m9:'JPN',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'AUS',m15:'ALG',m16:'COL',l1:'GER',l2:'NED',l3:'CRO',l4:'BEL',r1:'NOR',r2:'ENG',r3:'ARG',r4:'ALG',lq1:'GER',lq2:'BEL',rq1:'ENG',rq2:'ARG',lsf:'GER',rsf:'ARG',fin:'ARG'}},
+ {id:'p_yazy',name:'Yazy',crit:'bird',color:'#E0A82E',upset:'<b>Ghana</b> over Colombia',upKey:'m16',upTeam:'GHA',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'AUT',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'SUI',m16:'GHA',l1:'FRA',l2:'MAR',l3:'CRO',l4:'SEN',r1:'BRA',r2:'MEX',r3:'ARG',r4:'SUI',lq1:'MAR',lq2:'SEN',rq1:'BRA',rq2:'ARG',lsf:'MAR',rsf:'BRA',fin:'BRA'}},
+ {id:'p_blake',name:'Blake',crit:'fish',color:'#6E86B8',upset:'<b>USA</b> reach the quarter-finals',upKey:'l4',upTeam:'USA',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'COL',l1:'FRA',l2:'MAR',l3:'ESP',l4:'USA',r1:'BRA',r2:'ENG',r3:'ARG',r4:'COL',lq1:'FRA',lq2:'ESP',rq1:'BRA',rq2:'ARG',lsf:'ESP',rsf:'ARG',fin:'ESP'}},
+ {id:'p_ninon',name:'Ninon',crit:'ladybug',color:'#D9433C',upset:'<b>Portugal</b> send Croatia home',upKey:'m5',upTeam:'POR',picks:{m1:'GER',m2:'FRA',m3:'RSA',m4:'NED',m5:'POR',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'COL',l1:'FRA',l2:'NED',l3:'ESP',l4:'SEN',r1:'BRA',r2:'MEX',r3:'ARG',r4:'COL',lq1:'FRA',lq2:'ESP',rq1:'BRA',rq2:'ARG',lsf:'FRA',rsf:'ARG',fin:'FRA'}},
+ {id:'p_maame',name:'Maame',crit:'frog',color:'#6FA84F',upset:'<b>Cape Verde</b> topple Argentina',upKey:'m13',upTeam:'CPV',picks:{m1:'PAR',m2:'SWE',m3:'CAN',m4:'NED',m5:'CRO',m6:'AUT',m7:'BIH',m8:'SEN',m9:'BRA',m10:'CIV',m11:'MEX',m12:'COD',m13:'CPV',m14:'EGY',m15:'ALG',m16:'GHA',l1:'PAR',l2:'CAN',l3:'CRO',l4:'SEN',r1:'CIV',r2:'COD',r3:'CPV',r4:'GHA',lq1:'CAN',lq2:'SEN',rq1:'CIV',rq2:'CPV',lsf:'CAN',rsf:'CPV',fin:'CPV'}},
+ {id:'p_valini',name:'Valini',crit:'bunny',color:'#D86A92',upset:'<b>Norway</b> knock Brazil out',upKey:'r1',upTeam:'NOR',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'GHA',l1:'FRA',l2:'MAR',l3:'ESP',l4:'SEN',r1:'NOR',r2:'MEX',r3:'ARG',r4:'GHA',lq1:'MAR',lq2:'ESP',rq1:'NOR',rq2:'ARG',lsf:'ESP',rsf:'NOR',fin:'ESP'}}
 ];
 let PEOPLE=PRESETS.slice();
 
@@ -297,7 +301,7 @@ function renderBracket(){
 /* ===== PANELS ===== */
 function renderLegend(){document.getElementById('legend').innerHTML=PEOPLE.map(p=>`<span class="who">${critSVG(p.crit)}${p.name}</span>`).join('');}
 function renderChamps(){document.getElementById('champGrid').innerHTML=PEOPLE.map(p=>{const ch=pick(p,'fin');const row=ch?`<span class="lab">CHAMPION</span><span class="flag holo" style="width:34px;height:23px"><svg viewBox="0 0 24 16" width="34" height="23">${flagInner(ch)}</svg></span><span class="team">${TEAMS[ch]}</span>`:`<span class="lab">CHAMPION</span><span class="team" style="color:#9c8a72">still cooking their bracket 🦉</span>`;return `<div class="pcard"><div class="top">${critSVG(p.crit)}<div><div class="nm">${p.name}</div><div class="role">the ${CRIT_LABEL[p.crit]||'critter'}</div></div></div><div class="champrow">${row}</div></div>`;}).join('');}
-function renderUpsets(){document.getElementById('upsetGrid').innerHTML=PEOPLE.map(p=>`<div class="pcard upsetcard"><div class="top">${critSVG(p.crit)}<div><div class="nm">${p.name}</div><div class="role">biggest-shock call</div></div></div><div class="ucall">${p.upset||'—'}</div></div>`).join('');}
+function renderUpsets(){document.getElementById('upsetGrid').innerHTML=PEOPLE.map(p=>{const hit=p.upKey&&RESULTS[p.upKey]===p.upTeam;const badge=hit?`<div class="uphit"><span class="st">⭐</span> called it!</div>`:'';return `<div class="pcard upsetcard${hit?' hit':''}"><div class="top">${critSVG(p.crit)}<div><div class="nm">${p.name}</div><div class="role">biggest-shock call</div></div></div><div class="ucall">${p.upset||'—'}</div>${badge}</div>`;}).join('');}
 function renderStandings(){const rows=PEOPLE.map(p=>({p,pts:pointsFor(p)})).sort((a,b)=>b.pts-a.pts);document.getElementById('standTable').innerHTML=`<tr><th></th><th>Player</th><th>Champion pick</th><th style="text-align:right">Pts</th></tr>`+rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td><div class="nmcell">${critSVG(r.p.crit)}${r.p.name}</div></td><td>${pick(r.p,'fin')?TEAMS[pick(r.p,'fin')]:'<span style="color:#9c8a72">still picking…</span>'}</td><td class="pts">${r.pts}</td></tr>`).join('');document.getElementById('kickNote').textContent='Updated through '+UPDATED_THROUGH+'. Points recompute automatically as each result lands.';}
 function renderAll(){renderBracket();renderLegend();renderChamps();renderUpsets();renderStandings();}
 
@@ -499,7 +503,7 @@ async function syncResults(){
 /* ===== AUTO-FRESHNESS =====
    GitHub Pages caches the HTML, so returning visitors can get a stale copy.
    This quietly checks for a newer build and reloads once when it finds one. */
-const BUILD='2026-06-29-valini-full-6';  // bump this string on every deploy
+const BUILD='2026-06-29-upset-star-7';  // bump this string on every deploy
 async function checkVersion(){
  try{
   const r=await fetch('./index.html?cb='+Date.now(),{cache:'no-store'});
