@@ -3,607 +3,433 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BRACKET '26</title>
+<title>World Cup '26</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+  @property --holo { syntax:'<angle>'; inherits:false; initial-value:0deg; }
   :root{
-    --sky1:#C2E6F7; --sky2:#D5F1EE; --sky3:#A8DDD4;
-    --sun1:#FDE8C2; --sun2:#F9D5B6; --sun3:#F2C6D0;
+    --sky1:#BCE4F5; --sky2:#CFEFEC; --sky3:#A6DBD2;
+    --sun1:#FCE6BE; --sun2:#F8D2B2; --sun3:#F2C2CE;
     --cream:#FBF6EC; --card:#FFFDF7;
     --ink:#463726; --ink2:#6E5A45; --muted:#9c8a72;
-    --coral:#EE7E54; --coral2:#C75C52;
-    --line:#E6D8C2;
-    --pixel:'Pixelify Sans', system-ui, sans-serif;
-    --body:'Nunito', system-ui, sans-serif;
+    --coral:#EE7E54; --coral2:#C75C52; --line:#E6D8C2;
+    --pixel:'Pixelify Sans', system-ui, sans-serif; --body:'Nunito', system-ui, sans-serif;
   }
-  *{box-sizing:border-box}
-  html,body{margin:0}
-  body{
-    font-family:var(--body); color:var(--ink);
+  *{box-sizing:border-box} html,body{margin:0}
+  body{ font-family:var(--body); color:var(--ink);
     background:
-      radial-gradient(120% 80% at 50% -10%, var(--sun1) 0%, rgba(253,232,194,0) 55%),
-      linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 28%, var(--cream) 60%, var(--cream) 100%);
-    min-height:100vh;
-  }
-  .wrap{max-width:1180px; margin:0 auto; padding:0 16px 64px}
+      radial-gradient(120% 70% at 50% 2%, rgba(255,246,214,.95) 0%, rgba(255,246,214,0) 42%),
+      linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 18%, var(--sky3) 34%, var(--sun1) 60%, var(--sun2) 78%, var(--sun3) 100%);
+    background-attachment:fixed; min-height:100vh; }
+  .wrap{max-width:1240px; margin:0 auto; padding:0 16px 70px}
 
-  /* header */
-  header.bar{
-    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
-    padding:18px 4px 8px;
-  }
+  header.bar{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 4px 10px; }
   .logo{font-family:var(--pixel); font-weight:700; font-size:30px; letter-spacing:1px; color:var(--coral2);
-    text-shadow:1px 1px 0 #fff, 2px 2px 0 rgba(199,92,82,.18);}
+    text-shadow:1px 1px 0 #fff, 2px 2px 0 rgba(199,92,82,.20);}
   .logo span{color:var(--ink)}
   nav.tabs{display:flex; gap:6px; flex-wrap:wrap; margin-left:auto}
-  .tab{font-family:var(--pixel); font-size:14px; border:2px solid var(--ink); background:var(--card);
-    color:var(--ink); border-radius:10px; padding:6px 12px; cursor:pointer; box-shadow:2px 2px 0 rgba(70,55,38,.18);
-    transition:transform .06s}
-  .tab:hover{transform:translateY(-1px)}
-  .tab.active{background:var(--coral); color:#fff; border-color:var(--coral2)}
-  .addbtn{font-family:var(--pixel); font-size:14px; border:2px solid var(--coral2); background:var(--sun1);
-    color:var(--coral2); border-radius:10px; padding:6px 12px; cursor:pointer; box-shadow:2px 2px 0 rgba(199,92,82,.25)}
-  .addbtn:hover{transform:translateY(-1px)}
+  .tab{font-family:var(--pixel); font-size:14px; border:2px solid var(--ink); background:var(--card); color:var(--ink);
+    border-radius:10px; padding:6px 12px; cursor:pointer; box-shadow:2px 2px 0 rgba(70,55,38,.18); transition:transform .06s}
+  .tab:hover{transform:translateY(-1px)} .tab.active{background:var(--coral); color:#fff; border-color:var(--coral2)}
+  .iconbtn{font-family:var(--pixel); font-size:14px; border:2px solid var(--coral2); background:#fff6e4; color:var(--coral2);
+    border-radius:10px; padding:6px 11px; cursor:pointer; box-shadow:2px 2px 0 rgba(199,92,82,.25)}
+  .iconbtn:hover{transform:translateY(-1px)}
+  .panel{display:none} .panel.show{display:block}
 
-  .panel{display:none}
-  .panel.show{display:block}
+  .sky-card{ background:linear-gradient(180deg, rgba(255,255,255,.66), rgba(255,255,255,.34));
+    border:2px solid rgba(255,255,255,.85); border-radius:18px; padding:12px 14px 16px;
+    box-shadow:0 10px 30px rgba(110,140,160,.22); }
+  .eyebrow{font-family:var(--pixel); font-size:13px; color:var(--coral2); letter-spacing:.5px; margin:4px 2px 8px; text-shadow:0 1px 0 rgba(255,255,255,.6)}
+  .live{display:inline-flex; align-items:center; gap:6px; font-family:var(--pixel); font-size:12px; color:#fff; background:var(--coral2); border-radius:20px; padding:3px 10px; margin-left:6px}
+  .live i{width:7px;height:7px;border-radius:50%;background:#9ff0a0; animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(159,240,160,.7)}70%{box-shadow:0 0 0 6px rgba(159,240,160,0)}100%{box-shadow:0 0 0 0 rgba(159,240,160,0)}}
 
-  /* section card */
-  .sky-card{
-    background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.2));
-    border:2px solid #fff; border-radius:18px; padding:10px 12px 14px;
-    box-shadow:0 8px 24px rgba(120,150,170,.18);
-  }
-  .eyebrow{font-family:var(--pixel); font-size:13px; color:var(--coral2); letter-spacing:.5px; margin:2px 2px 8px}
+  /* zoom viewport */
+  .bv{position:relative; width:100%; aspect-ratio:1048/704; overflow:hidden; border-radius:14px; touch-action:none; cursor:grab; background:rgba(255,255,255,.18)}
+  .bv.drag{cursor:grabbing}
+  .bvstage{position:absolute; inset:0; transform-origin:0 0; will-change:transform}
+  #bracketSvg{width:100%; height:100%; display:block; overflow:visible}
+  .zoomctl{position:absolute; top:10px; right:10px; display:flex; flex-direction:column; gap:6px; z-index:5}
+  .zoomctl button{width:34px;height:34px; font-family:var(--pixel); font-size:18px; border:2px solid var(--ink); background:#fffdf7;
+    border-radius:9px; cursor:pointer; box-shadow:2px 2px 0 rgba(70,55,38,.18); line-height:1}
+  .zoomctl button:active{transform:translateY(1px)}
 
-  /* bracket */
-  #bracketSvg{width:100%; height:auto; display:block}
-  .legend{display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin:10px 4px 0}
-  .legend .who{display:flex; align-items:center; gap:7px; font-weight:700; font-size:13px}
+  .legend{display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin:12px 4px 0}
+  .legend .who{display:flex; align-items:center; gap:6px; font-weight:800; font-size:13px}
   .legend .who .crit{width:26px; height:30px}
-  .legend .dot{width:11px; height:11px; border-radius:50%; border:2px solid var(--ink)}
-  .hint{font-size:12.5px; color:var(--ink2); margin:8px 4px 0; font-weight:600}
+  .hint{font-size:12.5px; color:var(--ink2); margin:8px 4px 0; font-weight:600; text-shadow:0 1px 0 rgba(255,255,255,.5)}
 
-  /* panels grid */
-  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px; margin-top:6px}
-  .pcard{background:var(--card); border:2px solid var(--line); border-radius:14px; padding:12px;
-    box-shadow:3px 3px 0 rgba(70,55,38,.08)}
+  /* tree node styling (applies inside foreignObject too) */
+  .fo{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:visible}
+  .node{width:100%;background:#FFFDF7;border:1.6px solid #E2D2B6;border-radius:9px;box-shadow:0 2px 0 rgba(70,55,38,.10);
+    padding:5px 4px;display:flex;flex-direction:column;justify-content:center;gap:2px;overflow:visible}
+  .node.finN{border-color:#EE7E54;box-shadow:0 0 0 2px rgba(238,126,84,.20)}
+  .slot{display:flex;flex-wrap:wrap;gap:7px 8px;align-items:flex-end;justify-content:center;min-height:24px;padding:11px 2px 2px}
+  .slot.empty{min-height:14px;padding:0}
+  .divline{height:1.4px;background:#E8DAC0;margin:1px 2px}
+  .tm{position:relative;display:inline-flex;flex-direction:column;align-items:center}
+  .tm .flag{display:block;border:1.6px solid #463726;border-radius:3px;overflow:hidden;background:#fff;box-shadow:0 1px 0 rgba(70,55,38,.25)}
+  .tm.grey{opacity:.34;filter:grayscale(.8)}
+  .crew{position:absolute;top:-13px;display:flex;justify-content:center;pointer-events:none;z-index:3}
+  .crew .crit{width:19px;height:21px;margin:0 -4px;filter:drop-shadow(0 1px 0 rgba(70,55,38,.3))}
+
+  /* holographic foil */
+  .holo{position:relative; z-index:1; border-radius:4px}
+  .holo::before{content:"";position:absolute;inset:-3.5px;border-radius:6px;padding:3px;z-index:-1;
+    background:conic-gradient(from var(--holo), #ff5f6d,#ffd166,#8affc1,#4fc3ff,#c08bff,#ff8fd0,#ff5f6d);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    animation:holoSpin 3.5s linear infinite; filter:saturate(1.5) brightness(1.05);
+    box-shadow:0 0 7px rgba(180,150,255,.55)}
+  .holo::after{content:"";position:absolute;inset:0;border-radius:4px;pointer-events:none;mix-blend-mode:screen;opacity:.55;
+    background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.85) 48%, transparent 66%);
+    background-size:280% 100%; animation:holoSheen 3.5s linear infinite}
+  @keyframes holoSpin{to{--holo:360deg}}
+  @keyframes holoSheen{0%{background-position:160% 0}100%{background-position:-60% 0}}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(214px,1fr)); gap:12px; margin-top:4px}
+  .pcard{background:var(--card); border:2px solid var(--line); border-radius:14px; padding:12px; box-shadow:3px 3px 0 rgba(70,55,38,.09)}
   .pcard .top{display:flex; align-items:center; gap:10px}
-  .pcard .crit{width:40px; height:46px; flex:none}
-  .pcard .nm{font-family:var(--pixel); font-size:18px}
+  .pcard .crit{width:44px; height:50px; flex:none}
+  .pcard .nm{font-family:var(--pixel); font-size:19px}
   .pcard .role{font-size:12px; color:var(--ink2); font-weight:700}
-  .champrow{display:flex; align-items:center; gap:8px; margin-top:10px; background:var(--sun1);
-    border:1.5px solid #f0d8b4; border-radius:10px; padding:6px 8px}
+  .champrow{display:flex; align-items:center; gap:9px; margin-top:10px; background:var(--sun1); border:1.5px solid #f0d8b4; border-radius:10px; padding:7px 9px}
   .champrow .lab{font-size:11px; font-family:var(--pixel); color:var(--coral2)}
   .champrow .team{font-weight:800; font-size:14px}
-  .flag{display:inline-block; border:2px solid var(--ink); border-radius:3px; overflow:hidden; vertical-align:middle;
-    box-shadow:0 1px 0 rgba(70,55,38,.25); background:#fff}
+  .flag{display:inline-block; border:2px solid var(--ink); border-radius:3px; overflow:hidden; vertical-align:middle; box-shadow:0 1px 0 rgba(70,55,38,.25); background:#fff}
   .flag svg{display:block}
-  .upsetcard .ucall{margin-top:10px; font-size:13.5px; font-weight:700; background:#fff0f3; border:1.5px solid #f3c9d4;
-    border-radius:10px; padding:8px 10px; color:var(--coral2)}
+  .upsetcard .ucall{margin-top:10px; font-size:13.5px; font-weight:700; background:#fff0f3; border:1.5px solid #f3c9d4; border-radius:10px; padding:8px 10px; color:var(--coral2)}
   .upsetcard .ucall b{color:var(--ink)}
 
-  /* standings */
   table.stand{width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden}
-  table.stand th,table.stand td{padding:9px 12px; text-align:left; font-size:14px}
+  table.stand th,table.stand td{padding:10px 12px; text-align:left; font-size:14px}
   table.stand th{font-family:var(--pixel); font-size:13px; background:var(--sun1); color:var(--coral2)}
+  table.stand td.pts{font-family:var(--pixel); font-size:18px; color:var(--coral2); text-align:right; width:60px}
+  table.stand td.rk{font-family:var(--pixel); width:34px; color:var(--muted)}
+  table.stand .nmcell{display:flex; align-items:center; gap:8px; font-weight:800}
+  table.stand .nmcell .crit{width:28px;height:32px}
   table.stand tr+tr td{border-top:1.5px solid var(--line)}
   .keybox{margin-top:12px; font-size:13px; color:var(--ink2); font-weight:600; line-height:1.7}
-  .keybox b{color:var(--ink)}
-  .kick{margin-top:10px; font-family:var(--pixel); font-size:13px; color:var(--coral2)}
+  .keybox b{color:var(--ink)} .kick{margin-top:10px; font-family:var(--pixel); font-size:12.5px; color:var(--coral2)}
 
-  /* modal */
-  .modal{position:fixed; inset:0; background:rgba(70,55,38,.42); display:none; align-items:flex-start; justify-content:center;
-    padding:24px 12px; overflow:auto; z-index:50}
+  .modal{position:fixed; inset:0; background:rgba(70,55,38,.42); display:none; align-items:flex-start; justify-content:center; padding:24px 12px; overflow:auto; z-index:50}
   .modal.show{display:flex}
-  .sheet{background:var(--cream); border:3px solid var(--ink); border-radius:18px; max-width:640px; width:100%;
-    box-shadow:0 14px 40px rgba(0,0,0,.25); padding:16px 18px 20px}
+  .sheet{background:var(--cream); border:3px solid var(--ink); border-radius:18px; max-width:680px; width:100%; box-shadow:0 14px 40px rgba(0,0,0,.25); padding:16px 18px 20px}
   .sheet h2{font-family:var(--pixel); margin:.2em 0 .1em; color:var(--coral2)}
   .sheet .sub{font-size:13.5px; color:var(--ink2); font-weight:600; margin-bottom:12px}
-  .field{margin:10px 0}
-  .field label{display:block; font-family:var(--pixel); font-size:13px; margin-bottom:6px}
-  .field input[type=text]{width:100%; padding:10px 12px; border:2px solid var(--line); border-radius:10px; font-family:var(--body);
-    font-size:15px; font-weight:700; background:#fff}
-  .critpick{display:flex; gap:10px; flex-wrap:wrap}
-  .critopt{border:2px solid var(--line); background:#fff; border-radius:12px; padding:8px; cursor:pointer; width:74px; text-align:center}
-  .critopt.sel{border-color:var(--coral); box-shadow:0 0 0 3px rgba(238,126,84,.18)}
-  .critopt .crit{width:40px; height:46px; margin:0 auto}
-  .critopt small{display:block; font-size:11px; font-weight:800; margin-top:2px}
-
-  .matchpick{display:flex; gap:8px; align-items:stretch; margin:7px 0}
-  .matchpick .opt{flex:1; display:flex; align-items:center; gap:8px; border:2px solid var(--line); background:#fff;
-    border-radius:10px; padding:7px 9px; cursor:pointer; font-weight:800; font-size:14px}
-  .matchpick .opt:hover{border-color:var(--coral)}
-  .matchpick .opt.sel{border-color:var(--coral2); background:var(--sun1)}
-  .vs{align-self:center; font-family:var(--pixel); font-size:12px; color:var(--ink2)}
-  .roundlab{font-family:var(--pixel); color:var(--coral2); font-size:15px; margin:16px 0 4px}
-  .steprow{display:flex; gap:10px; align-items:center; margin-top:16px}
-  .btn{font-family:var(--pixel); font-size:15px; border:2px solid var(--ink); border-radius:12px; padding:9px 16px; cursor:pointer;
-    background:#fff; box-shadow:3px 3px 0 rgba(70,55,38,.18)}
-  .btn.primary{background:var(--coral); color:#fff; border-color:var(--coral2)}
-  .btn:disabled{opacity:.45; cursor:not-allowed; box-shadow:none}
   .closex{float:right; font-family:var(--pixel); font-size:18px; border:none; background:none; cursor:pointer; color:var(--ink2)}
-  .savednote{font-size:12.5px; color:var(--ink2); font-weight:700; margin-top:6px}
+  .shareopts{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px}
+  .shareopts .so{font-family:var(--pixel); font-size:13px; border:2px solid var(--line); background:#fff; border-radius:10px; padding:7px 11px; cursor:pointer}
+  .shareopts .so.sel{border-color:var(--coral2); background:var(--sun1)}
+  .champsHead{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:8px}
+  .pickwrap{background:#fff6e4; border:2px dashed var(--coral); border-radius:12px; padding:10px 12px; margin-bottom:12px}
+  .picklabel{display:block; font-family:var(--pixel); font-size:13px; color:var(--coral2); margin-bottom:6px}
+  .bigsel{width:100%; font-family:var(--body); font-weight:800; font-size:15px; padding:10px 12px; border:2px solid var(--ink); border-radius:10px; background:#fff; cursor:pointer}
+  .pickrow{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px}
+  .pickrow select{font-family:var(--body); font-weight:700; padding:7px 9px; border:2px solid var(--line); border-radius:9px; background:#fff}
+  .preview{border:2px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; line-height:0}
+  .preview svg{width:100%; height:auto; display:block}
+  .btn{font-family:var(--pixel); font-size:15px; border:2px solid var(--ink); border-radius:12px; padding:9px 16px; cursor:pointer; background:#fff; box-shadow:3px 3px 0 rgba(70,55,38,.18)}
+  .btn.primary{background:var(--coral); color:#fff; border-color:var(--coral2)}
+  .steprow{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
   @media(max-width:560px){ .logo{font-size:24px} }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="bar">
-    <div class="logo">BRACKET<span>'26</span></div>
+    <div class="logo">WORLD CUP<span> '26</span></div>
     <nav class="tabs">
       <button class="tab active" data-tab="bracket">Bracket</button>
       <button class="tab" data-tab="champs">Champions</button>
       <button class="tab" data-tab="upset">Biggest Upset</button>
       <button class="tab" data-tab="stand">Standings</button>
     </nav>
-    <button class="addbtn" id="openAdd">+ Add your bracket</button>
+    <button class="iconbtn" id="musicBtn" title="Stadium tune">♪ Music</button>
+    <button class="iconbtn" id="shareBtn">⤴ Share a card</button>
   </header>
 
-  <!-- BRACKET -->
   <section class="panel show" id="tab-bracket">
-    <div class="eyebrow">everyone's picks, one tree — flags appear only where someone backed them</div>
+    <div class="eyebrow">everyone's picks on one tree — each flag wears the critters of whoever backed it <span class="live" id="liveTag"><i></i>LIVE</span></div>
     <div class="sky-card">
-      <svg id="bracketSvg" viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg" font-family="Nunito"></svg>
+      <div class="bv" id="bv">
+        <div class="zoomctl">
+          <button data-z="in">+</button><button data-z="out">−</button><button data-z="reset">⤢</button>
+        </div>
+        <div class="bvstage" id="bvstage">
+          <svg id="bracketSvg" viewBox="0 0 1048 704" xmlns="http://www.w3.org/2000/svg" font-family="Nunito"></svg>
+        </div>
+      </div>
     </div>
     <div class="legend" id="legend"></div>
-    <div class="hint">Each team is tagged with little colour dots for who picked it. Where everyone agrees you'll see one flag; where picks split, they stack. Teams will grey out as real games finish.</div>
+    <div class="hint">Drag to pan, scroll or use + / − to zoom in. Critters perched on a flag = who picked it. Knocked-out teams fade; confirmed winners get the holographic foil.</div>
   </section>
 
-  <!-- CHAMPIONS -->
-  <section class="panel" id="tab-champs">
-    <div class="eyebrow">five friends, five different winners called</div>
-    <div class="grid" id="champGrid"></div>
-  </section>
-
-  <!-- UPSET -->
-  <section class="panel" id="tab-upset">
-    <div class="eyebrow">call the tournament's biggest shock — nail it for bonus points</div>
-    <div class="grid" id="upsetGrid"></div>
-  </section>
-
-  <!-- STANDINGS -->
+  <section class="panel" id="tab-champs"><div class="champsHead"><div class="eyebrow" style="margin:0">five friends, five different winners called</div><button class="iconbtn" id="champShare">⤴ Share this card</button></div><div class="grid" id="champGrid"></div></section>
+  <section class="panel" id="tab-upset"><div class="eyebrow">call the tournament's biggest shock — nail it for bonus points</div><div class="grid" id="upsetGrid"></div></section>
   <section class="panel" id="tab-stand">
     <div class="eyebrow">points bank as the rounds play out</div>
     <div class="sky-card">
       <table class="stand" id="standTable"></table>
       <div class="kick" id="kickNote"></div>
-      <div class="keybox">
-        <b>Scoring</b> — each correct call: reach Round of 16 <b>+1</b> · Quarter-final <b>+2</b> · Semi-final <b>+3</b> · Final <b>+5</b> · Champion <b>+10</b>. Biggest-upset bonus <b>+5</b>.
-      </div>
+      <div class="keybox"><b>Scoring</b> — correct call: reach Round of 16 <b>+1</b> · Quarter-final <b>+2</b> · Semi-final <b>+3</b> · Final <b>+5</b> · Champion <b>+10</b>. Biggest-upset bonus <b>+5</b>.</div>
     </div>
   </section>
 </div>
 
-<!-- ADD MODAL -->
-<div class="modal" id="addModal">
-  <div class="sheet" id="sheet"></div>
-</div>
+<div class="modal" id="shareModal"><div class="sheet" id="shareSheet"></div></div>
 
 <script>
-/* ============================ DATA ============================ */
-const TEAMS = {
-  GER:"Germany", PAR:"Paraguay", FRA:"France", SWE:"Sweden", RSA:"South Africa", CAN:"Canada",
-  NED:"Netherlands", MAR:"Morocco", POR:"Portugal", CRO:"Croatia", ESP:"Spain", AUT:"Austria",
-  USA:"USA", BIH:"Bosnia & H.", BEL:"Belgium", SEN:"Senegal", BRA:"Brazil", JPN:"Japan",
-  CIV:"Côte d'Ivoire", NOR:"Norway", MEX:"Mexico", ECU:"Ecuador", ENG:"England", COD:"DR Congo",
-  ARG:"Argentina", CPV:"Cape Verde", AUS:"Australia", EGY:"Egypt", SUI:"Switzerland", ALG:"Algeria",
-  COL:"Colombia", GHA:"Ghana"
-};
-
-/* simplified, recognisable pixel-style flags, 24x16 */
+/* ===== TEAMS / FLAGS ===== */
+const TEAMS={GER:"Germany",PAR:"Paraguay",FRA:"France",SWE:"Sweden",RSA:"South Africa",CAN:"Canada",NED:"Netherlands",MAR:"Morocco",POR:"Portugal",CRO:"Croatia",ESP:"Spain",AUT:"Austria",USA:"USA",BIH:"Bosnia & H.",BEL:"Belgium",SEN:"Senegal",BRA:"Brazil",JPN:"Japan",CIV:"Côte d'Ivoire",NOR:"Norway",MEX:"Mexico",ECU:"Ecuador",ENG:"England",COD:"DR Congo",ARG:"Argentina",CPV:"Cape Verde",AUS:"Australia",EGY:"Egypt",SUI:"Switzerland",ALG:"Algeria",COL:"Colombia",GHA:"Ghana"};
 const h3=(a,b,c)=>`<rect width="24" height="5.34" fill="${a}"/><rect y="5.33" width="24" height="5.34" fill="${b}"/><rect y="10.66" width="24" height="5.34" fill="${c}"/>`;
 const v3=(a,b,c)=>`<rect width="8" height="16" fill="${a}"/><rect x="8" width="8" height="16" fill="${b}"/><rect x="16" width="8" height="16" fill="${c}"/>`;
-const FLAGS = {
-  GER:h3('#1a1a1a','#D7141A','#F4CE46'),
-  PAR:h3('#D52B1E','#ffffff','#0038A8'),
-  FRA:v3('#2A4FA0','#ffffff','#E03C31'),
-  SWE:`<rect width="24" height="16" fill="#2A6BB0"/><rect x="7" width="3" height="16" fill="#F4CE46"/><rect y="6.5" width="24" height="3" fill="#F4CE46"/>`,
-  RSA:`<rect width="24" height="8" fill="#E03C31"/><rect y="8" width="24" height="8" fill="#2A4FA0"/><rect y="6" width="24" height="4" fill="#007A4D"/><path d="M0 0 L11 8 L0 16Z" fill="#1a1a1a"/>`,
-  CAN:`<rect width="24" height="16" fill="#ffffff"/><rect width="6" height="16" fill="#D52B1E"/><rect x="18" width="6" height="16" fill="#D52B1E"/><path d="M12 4 C10.5 6.5 11 8 12 12 C13 8 13.5 6.5 12 4Z" fill="#D52B1E"/>`,
-  NED:h3('#AE1C28','#ffffff','#21468B'),
-  MAR:`<rect width="24" height="16" fill="#C1272D"/><circle cx="12" cy="8" r="3.3" fill="none" stroke="#0A6B3B" stroke-width="1.3"/>`,
-  POR:`<rect width="10" height="16" fill="#1E7A3D"/><rect x="10" width="14" height="16" fill="#D52B1E"/><circle cx="10" cy="8" r="2.1" fill="#F4CE46"/>`,
-  CRO:`${h3('#D52B1E','#ffffff','#2A4FA0')}<rect x="10" y="4.5" width="4" height="4" fill="#D52B1E"/><rect x="10.7" y="5.2" width="1.3" height="1.3" fill="#fff"/><rect x="12" y="6.5" width="1.3" height="1.3" fill="#fff"/>`,
-  ESP:`<rect width="24" height="4" fill="#D52B1E"/><rect y="4" width="24" height="8" fill="#E4A11B"/><rect y="12" width="24" height="4" fill="#D52B1E"/>`,
-  AUT:h3('#D52B1E','#ffffff','#D52B1E'),
-  USA:`<rect width="24" height="16" fill="#ffffff"/><rect y="2.2" width="24" height="2.2" fill="#B22234"/><rect y="6.6" width="24" height="2.2" fill="#B22234"/><rect y="11" width="24" height="2.2" fill="#B22234"/><rect width="11" height="8" fill="#3C3B6E"/>`,
-  BIH:`<rect width="24" height="16" fill="#2A4FA0"/><path d="M8 0 L24 0 L24 16Z" fill="#F4CE46"/>`,
-  BEL:v3('#1a1a1a','#F4CE46','#D52B1E'),
-  SEN:`${v3('#1E7A3D','#F4CE46','#D52B1E')}<circle cx="12" cy="8" r="2" fill="#1E7A3D"/>`,
-  BRA:`<rect width="24" height="16" fill="#1E9E54"/><path d="M12 2 L22 8 L12 14 L2 8Z" fill="#F4D02F"/><circle cx="12" cy="8" r="3.1" fill="#2A4FA0"/>`,
-  JPN:`<rect width="24" height="16" fill="#ffffff"/><circle cx="12" cy="8" r="4.1" fill="#BC002D"/>`,
-  CIV:v3('#F77F00','#ffffff','#1E9E54'),
-  NOR:`<rect width="24" height="16" fill="#C8102E"/><rect x="7" width="3" height="16" fill="#fff"/><rect y="6.5" width="24" height="3" fill="#fff"/><rect x="7.7" width="1.6" height="16" fill="#21468B"/><rect y="7.2" width="24" height="1.6" fill="#21468B"/>`,
-  MEX:`${v3('#1E7A3D','#ffffff','#D52B1E')}<circle cx="12" cy="8" r="1.7" fill="#7A4A18"/>`,
-  ECU:`<rect width="24" height="8" fill="#F4CE46"/><rect y="8" width="24" height="4" fill="#2A4FA0"/><rect y="12" width="24" height="4" fill="#D52B1E"/>`,
-  ENG:`<rect width="24" height="16" fill="#ffffff"/><rect x="10" width="4" height="16" fill="#D52B1E"/><rect y="6" width="24" height="4" fill="#D52B1E"/>`,
-  COD:`<rect width="24" height="16" fill="#4FA9DC"/><path d="M0 14 L24 4" stroke="#D52B1E" stroke-width="3"/><path d="M4 3 l.8 1.7 1.8.1 -1.4 1.2 .5 1.8 -1.7 -1 -1.7 1 .5 -1.8 -1.4 -1.2 1.8 -.1Z" fill="#F4CE46"/>`,
-  ARG:`${h3('#7CB6E0','#ffffff','#7CB6E0')}<circle cx="12" cy="8" r="1.7" fill="#F4C430"/>`,
-  CPV:`<rect width="24" height="16" fill="#1F4FA0"/><rect y="9" width="24" height="3" fill="#fff"/><rect y="11" width="24" height="1.4" fill="#D52B1E"/>`,
-  AUS:`<rect width="24" height="16" fill="#10316B"/><rect width="11" height="8" fill="#16357a"/><path d="M0 0 L11 8 M11 0 L0 8" stroke="#fff" stroke-width="1"/><circle cx="18" cy="11" r="1.3" fill="#fff"/>`,
-  EGY:`${h3('#D52B1E','#ffffff','#1a1a1a')}<circle cx="12" cy="8" r="1.5" fill="#C8A02E"/>`,
-  SUI:`<rect width="24" height="16" fill="#D52B1E"/><rect x="10.5" y="4" width="3" height="8" fill="#fff"/><rect x="8" y="6.5" width="8" height="3" fill="#fff"/>`,
-  ALG:`<rect width="12" height="16" fill="#1E7A3D"/><rect x="12" width="12" height="16" fill="#fff"/><circle cx="12" cy="8" r="3" fill="none" stroke="#D52B1E" stroke-width="1.2"/>`,
-  COL:`<rect width="24" height="8" fill="#F4CE46"/><rect y="8" width="24" height="4" fill="#2A4FA0"/><rect y="12" width="24" height="4" fill="#D52B1E"/>`,
-  GHA:`${h3('#D52B1E','#F4CE46','#1E7A3D')}<path d="M12 5 l.9 2 2.1.1 -1.6 1.4 .6 2 -2 -1.1 -2 1.1 .6 -2 -1.6 -1.4 2.1 -.1Z" fill="#1a1a1a"/>`
+const FLAGS={
+ GER:h3('#1a1a1a','#D7141A','#F4CE46'),PAR:h3('#D52B1E','#ffffff','#0038A8'),FRA:v3('#2A4FA0','#ffffff','#E03C31'),
+ SWE:`<rect width="24" height="16" fill="#2A6BB0"/><rect x="7" width="3" height="16" fill="#F4CE46"/><rect y="6.5" width="24" height="3" fill="#F4CE46"/>`,
+ RSA:`<rect width="24" height="8" fill="#E03C31"/><rect y="8" width="24" height="8" fill="#2A4FA0"/><rect y="6" width="24" height="4" fill="#007A4D"/><path d="M0 0 L11 8 L0 16Z" fill="#1a1a1a"/>`,
+ CAN:`<rect width="24" height="16" fill="#ffffff"/><rect width="6" height="16" fill="#D52B1E"/><rect x="18" width="6" height="16" fill="#D52B1E"/><path d="M12 4 C10.5 6.5 11 8 12 12 C13 8 13.5 6.5 12 4Z" fill="#D52B1E"/>`,
+ NED:h3('#AE1C28','#ffffff','#21468B'),
+ MAR:`<rect width="24" height="16" fill="#C1272D"/><circle cx="12" cy="8" r="3.3" fill="none" stroke="#0A6B3B" stroke-width="1.3"/>`,
+ POR:`<rect width="10" height="16" fill="#1E7A3D"/><rect x="10" width="14" height="16" fill="#D52B1E"/><circle cx="10" cy="8" r="2.1" fill="#F4CE46"/>`,
+ CRO:`${h3('#D52B1E','#ffffff','#2A4FA0')}<rect x="10" y="4.5" width="4" height="4" fill="#D52B1E"/><rect x="10.7" y="5.2" width="1.3" height="1.3" fill="#fff"/><rect x="12" y="6.5" width="1.3" height="1.3" fill="#fff"/>`,
+ ESP:`<rect width="24" height="4" fill="#D52B1E"/><rect y="4" width="24" height="8" fill="#E4A11B"/><rect y="12" width="24" height="4" fill="#D52B1E"/>`,
+ AUT:h3('#D52B1E','#ffffff','#D52B1E'),
+ USA:`<rect width="24" height="16" fill="#ffffff"/><rect y="2.2" width="24" height="2.2" fill="#B22234"/><rect y="6.6" width="24" height="2.2" fill="#B22234"/><rect y="11" width="24" height="2.2" fill="#B22234"/><rect width="11" height="8" fill="#3C3B6E"/>`,
+ BIH:`<rect width="24" height="16" fill="#2A4FA0"/><path d="M8 0 L24 0 L24 16Z" fill="#F4CE46"/>`,
+ BEL:v3('#1a1a1a','#F4CE46','#D52B1E'),
+ SEN:`${v3('#1E7A3D','#F4CE46','#D52B1E')}<circle cx="12" cy="8" r="2" fill="#1E7A3D"/>`,
+ BRA:`<rect width="24" height="16" fill="#1E9E54"/><path d="M12 2 L22 8 L12 14 L2 8Z" fill="#F4D02F"/><circle cx="12" cy="8" r="3.1" fill="#2A4FA0"/>`,
+ JPN:`<rect width="24" height="16" fill="#ffffff"/><circle cx="12" cy="8" r="4.1" fill="#BC002D"/>`,
+ CIV:v3('#F77F00','#ffffff','#1E9E54'),
+ NOR:`<rect width="24" height="16" fill="#C8102E"/><rect x="7" width="3" height="16" fill="#fff"/><rect y="6.5" width="24" height="3" fill="#fff"/><rect x="7.7" width="1.6" height="16" fill="#21468B"/><rect y="7.2" width="24" height="1.6" fill="#21468B"/>`,
+ MEX:`${v3('#1E7A3D','#ffffff','#D52B1E')}<circle cx="12" cy="8" r="1.7" fill="#7A4A18"/>`,
+ ECU:`<rect width="24" height="8" fill="#F4CE46"/><rect y="8" width="24" height="4" fill="#2A4FA0"/><rect y="12" width="24" height="4" fill="#D52B1E"/>`,
+ ENG:`<rect width="24" height="16" fill="#ffffff"/><rect x="10" width="4" height="16" fill="#D52B1E"/><rect y="6" width="24" height="4" fill="#D52B1E"/>`,
+ COD:`<rect width="24" height="16" fill="#4FA9DC"/><path d="M0 14 L24 4" stroke="#D52B1E" stroke-width="3"/><path d="M4 3 l.8 1.7 1.8.1 -1.4 1.2 .5 1.8 -1.7 -1 -1.7 1 .5 -1.8 -1.4 -1.2 1.8 -.1Z" fill="#F4CE46"/>`,
+ ARG:`${h3('#7CB6E0','#ffffff','#7CB6E0')}<circle cx="12" cy="8" r="1.7" fill="#F4C430"/>`,
+ CPV:`<rect width="24" height="16" fill="#1F4FA0"/><rect y="9" width="24" height="3" fill="#fff"/><rect y="11" width="24" height="1.4" fill="#D52B1E"/>`,
+ AUS:`<rect width="24" height="16" fill="#10316B"/><rect width="11" height="8" fill="#16357a"/><path d="M0 0 L11 8 M11 0 L0 8" stroke="#fff" stroke-width="1"/><circle cx="18" cy="11" r="1.3" fill="#fff"/>`,
+ EGY:`${h3('#D52B1E','#ffffff','#1a1a1a')}<circle cx="12" cy="8" r="1.5" fill="#C8A02E"/>`,
+ SUI:`<rect width="24" height="16" fill="#D52B1E"/><rect x="10.5" y="4" width="3" height="8" fill="#fff"/><rect x="8" y="6.5" width="8" height="3" fill="#fff"/>`,
+ ALG:`<rect width="12" height="16" fill="#1E7A3D"/><rect x="12" width="12" height="16" fill="#fff"/><circle cx="12" cy="8" r="3" fill="none" stroke="#D52B1E" stroke-width="1.2"/>`,
+ COL:`<rect width="24" height="8" fill="#F4CE46"/><rect y="8" width="24" height="4" fill="#2A4FA0"/><rect y="12" width="24" height="4" fill="#D52B1E"/>`,
+ GHA:`${h3('#D52B1E','#F4CE46','#1E7A3D')}<path d="M12 5 l.9 2 2.1.1 -1.6 1.4 .6 2 -2 -1.1 -2 1.1 .6 -2 -1.6 -1.4 2.1 -.1Z" fill="#1a1a1a"/>`
 };
-function flagSVG(code, w){ const h=Math.round(w*16/24); return `<span class="flag" style="width:${w}px;height:${h}px"><svg viewBox="0 0 24 16" width="${w}" height="${h}">${FLAGS[code]||''}</svg></span>`; }
+function flagInner(code){ return (FLAGS[code]||'')+`<text x="12" y="11.7" text-anchor="middle" font-family="'Pixelify Sans',Arial,sans-serif" font-size="7.6" font-weight="700" fill="#fff" stroke="#1a1a1a" stroke-width="1.05" style="paint-order:stroke" letter-spacing="-0.4">${code}</text>`; }
+function flagSVG(code,w){ const h=Math.round(w*16/24); return `<span class="flag" style="width:${w}px;height:${h}px"><svg viewBox="0 0 24 16" width="${w}" height="${h}">${flagInner(code)}</svg></span>`; }
 
-/* critters (reverted cute GBA style) */
-const CRIT = {
-  cat:`<g transform="translate(0,1)"><rect x="-7" y="-5" width="14" height="12" rx="4" fill="#463726"/><rect x="-6" y="-4" width="12" height="10" rx="3" fill="#F2935A"/><rect x="-6" y="-4" width="12" height="3.5" rx="3" fill="#F9B783"/><rect x="-6" y="4" width="12" height="2" fill="#D9763C"/><rect x="-6" y="-7" width="3.5" height="3.5" fill="#F2935A"/><rect x="2.5" y="-7" width="3.5" height="3.5" fill="#F2935A"/><rect x="-3.5" y="-1.5" width="2.2" height="2.2" fill="#2b1d12"/><rect x="1.3" y="-1.5" width="2.2" height="2.2" fill="#2b1d12"/><rect x="-4" y="2.5" width="2.4" height="1.6" rx="0.6" fill="#EC6E84"/></g>`,
-  bird:`<g transform="translate(0,1)"><rect x="-6" y="-5" width="13" height="12" rx="5" fill="#463726"/><rect x="-5" y="-4" width="11" height="10" rx="4" fill="#F4CE62"/><rect x="-5" y="-4" width="11" height="3.5" rx="4" fill="#FBE598"/><rect x="-5" y="4" width="11" height="2" fill="#D9A93C"/><path d="M-5 0 L-9 1.2 L-5 2.6 Z" fill="#F08A3E"/><rect x="-1.4" y="-1.6" width="2.2" height="2.2" fill="#2b1d12"/><rect x="-1" y="-7.5" width="2" height="3" rx="1" fill="#D9A93C"/><rect x="3" y="2.5" width="2.4" height="1.6" rx="0.6" fill="#EC8A9A"/></g>`,
-  fish:`<g transform="translate(0,1)"><rect x="-8" y="-6" width="16" height="13" rx="4" fill="#463726"/><rect x="-7" y="-5" width="14" height="11" rx="3" fill="#A6BCE0"/><rect x="-7" y="-5" width="14" height="4" rx="3" fill="#CBDAF4"/><rect x="-7" y="4" width="14" height="2" fill="#7A93C4"/><rect x="-10" y="-1" width="3" height="5" rx="1.5" fill="#463726"/><rect x="-9" y="-1" width="2" height="3" fill="#A6BCE0"/><rect x="-6" y="-7" width="5" height="2.5" rx="1.2" fill="#88A0CE"/><rect x="2.5" y="-2" width="3" height="3" fill="#fff"/><rect x="3.3" y="-1.2" width="1.6" height="1.6" fill="#23304d"/><rect x="3.4" y="3" width="3" height="2" rx="0.8" fill="#ECA0AE"/></g>`,
-  bunny:`<g transform="translate(0,1)"><rect x="-5" y="-11" width="3.5" height="8" rx="1.7" fill="#463726"/><rect x="-4.3" y="-10" width="2.2" height="6" rx="1" fill="#F0A8C0"/><rect x="-6" y="-4" width="13" height="11" rx="5" fill="#463726"/><rect x="-5" y="-3" width="11" height="9" rx="4" fill="#F0A8C0"/><rect x="-5" y="-3" width="11" height="3.5" rx="4" fill="#F8C8D8"/><rect x="-5" y="4" width="11" height="2" fill="#D67E9C"/><rect x="-2" y="-0.6" width="2.2" height="2.2" fill="#4a1e2e"/><rect x="-5.5" y="1" width="2" height="1.4" fill="#C85E7E"/><circle cx="6" cy="4" r="2.6" fill="#F8C8D8"/><rect x="2.5" y="2" width="2.4" height="1.6" rx="0.6" fill="#F0A0B6"/></g>`,
-  frog:`<g transform="translate(0,1)"><rect x="-6" y="-6" width="5" height="5" rx="2.5" fill="#8FC96E"/><rect x="-5.2" y="-5.4" width="2" height="2" fill="#2b1d12"/><rect x="-7" y="-3" width="15" height="10" rx="5" fill="#463726"/><rect x="-6" y="-2" width="13" height="8" rx="4" fill="#8FC96E"/><rect x="-6" y="-2" width="13" height="3" rx="4" fill="#B6E298"/><rect x="-6" y="4" width="13" height="2" fill="#6FA84F"/><path d="M-1 3 q4 2 7 0" stroke="#3a5a2a" stroke-width="1.2" fill="none"/><rect x="4" y="1.5" width="2.4" height="1.6" rx="0.6" fill="#EC8A9A"/></g>`
+/* ===== CRITTERS ===== */
+const CRIT={
+ cat:`<g transform="translate(0,1)"><rect x="-7" y="-5" width="14" height="12" rx="4" fill="#463726"/><rect x="-6" y="-4" width="12" height="10" rx="3" fill="#F2935A"/><rect x="-6" y="-4" width="12" height="3.5" rx="3" fill="#F9B783"/><rect x="-6" y="4" width="12" height="2" fill="#D9763C"/><rect x="-6" y="-7" width="3.5" height="3.5" fill="#F2935A"/><rect x="2.5" y="-7" width="3.5" height="3.5" fill="#F2935A"/><rect x="-3.5" y="-1.5" width="2.2" height="2.2" fill="#2b1d12"/><rect x="1.3" y="-1.5" width="2.2" height="2.2" fill="#2b1d12"/><rect x="-4" y="2.5" width="2.4" height="1.6" rx="0.6" fill="#EC6E84"/></g>`,
+ bird:`<g transform="translate(0,1)"><rect x="-6" y="-5" width="13" height="12" rx="5" fill="#463726"/><rect x="-5" y="-4" width="11" height="10" rx="4" fill="#F4CE62"/><rect x="-5" y="-4" width="11" height="3.5" rx="4" fill="#FBE598"/><rect x="-5" y="4" width="11" height="2" fill="#D9A93C"/><path d="M-5 0 L-9 1.2 L-5 2.6 Z" fill="#F08A3E"/><rect x="-1.4" y="-1.6" width="2.2" height="2.2" fill="#2b1d12"/><rect x="-1" y="-7.5" width="2" height="3" rx="1" fill="#D9A93C"/><rect x="3" y="2.5" width="2.4" height="1.6" rx="0.6" fill="#EC8A9A"/></g>`,
+ fish:`<g transform="translate(0,1)"><rect x="-8" y="-6" width="16" height="13" rx="4" fill="#463726"/><rect x="-7" y="-5" width="14" height="11" rx="3" fill="#A6BCE0"/><rect x="-7" y="-5" width="14" height="4" rx="3" fill="#CBDAF4"/><rect x="-7" y="4" width="14" height="2" fill="#7A93C4"/><rect x="-10" y="-1" width="3" height="5" rx="1.5" fill="#463726"/><rect x="-9" y="-1" width="2" height="3" fill="#A6BCE0"/><rect x="-6" y="-7" width="5" height="2.5" rx="1.2" fill="#88A0CE"/><rect x="2.5" y="-2" width="3" height="3" fill="#fff"/><rect x="3.3" y="-1.2" width="1.6" height="1.6" fill="#23304d"/><rect x="3.4" y="3" width="3" height="2" rx="0.8" fill="#ECA0AE"/></g>`,
+ bunny:`<g transform="translate(0,1)"><rect x="-5" y="-11" width="3.5" height="8" rx="1.7" fill="#463726"/><rect x="-4.3" y="-10" width="2.2" height="6" rx="1" fill="#F0A8C0"/><rect x="-6" y="-4" width="13" height="11" rx="5" fill="#463726"/><rect x="-5" y="-3" width="11" height="9" rx="4" fill="#F0A8C0"/><rect x="-5" y="-3" width="11" height="3.5" rx="4" fill="#F8C8D8"/><rect x="-5" y="4" width="11" height="2" fill="#D67E9C"/><rect x="-2" y="-0.6" width="2.2" height="2.2" fill="#4a1e2e"/><rect x="-5.5" y="1" width="2" height="1.4" fill="#C85E7E"/><circle cx="6" cy="4" r="2.6" fill="#F8C8D8"/><rect x="2.5" y="2" width="2.4" height="1.6" rx="0.6" fill="#F0A0B6"/></g>`,
+ frog:`<g transform="translate(0,1)"><rect x="-6" y="-6" width="5" height="5" rx="2.5" fill="#8FC96E"/><rect x="-5.2" y="-5.4" width="2" height="2" fill="#2b1d12"/><rect x="-7" y="-3" width="15" height="10" rx="5" fill="#463726"/><rect x="-6" y="-2" width="13" height="8" rx="4" fill="#8FC96E"/><rect x="-6" y="-2" width="13" height="3" rx="4" fill="#B6E298"/><rect x="-6" y="4" width="13" height="2" fill="#6FA84F"/><path d="M-1 3 q4 2 7 0" stroke="#3a5a2a" stroke-width="1.2" fill="none"/><rect x="4" y="1.5" width="2.4" height="1.6" rx="0.6" fill="#EC8A9A"/></g>`
 };
-const CRIT_LABEL = {cat:"cat", bird:"bird", fish:"fish", bunny:"bunny", frog:"frog"};
-function critSVG(type){ return `<svg class="crit" viewBox="-12 -17 24 30">${CRIT[type]||CRIT.cat}</svg>`; }
+const CRIT_LABEL={cat:"cat",bird:"bird",fish:"fish",bunny:"bunny",frog:"frog"};
+function critSVG(t,cls){ return `<svg class="crit ${cls||''}" viewBox="-12 -17 24 30">${CRIT[t]||CRIT.cat}</svg>`; }
 
-/* fixtures + tree */
-const FIX = {
-  m1:['GER','PAR'], m2:['FRA','SWE'], m3:['RSA','CAN'], m4:['NED','MAR'],
-  m5:['POR','CRO'], m6:['ESP','AUT'], m7:['USA','BIH'], m8:['BEL','SEN'],
-  m9:['BRA','JPN'], m10:['CIV','NOR'], m11:['MEX','ECU'], m12:['ENG','COD'],
-  m13:['ARG','CPV'], m14:['AUS','EGY'], m15:['SUI','ALG'], m16:['COL','GHA']
-};
-const TREE = {
-  l1:['m1','m2'], l2:['m3','m4'], l3:['m5','m6'], l4:['m7','m8'],
-  r1:['m9','m10'], r2:['m11','m12'], r3:['m13','m14'], r4:['m15','m16'],
-  lq1:['l1','l2'], lq2:['l3','l4'], rq1:['r1','r2'], rq2:['r3','r4'],
-  lsf:['lq1','lq2'], rsf:['rq1','rq2'], fin:['lsf','rsf']
-};
-const ROUND_OF = {}; // matchId -> round name
-['m1','m2','m3','m4','m5','m6','m7','m8','m9','m10','m11','m12','m13','m14','m15','m16'].forEach(m=>ROUND_OF[m]='R32');
-['l1','l2','l3','l4','r1','r2','r3','r4'].forEach(m=>ROUND_OF[m]='R16');
-['lq1','lq2','rq1','rq2'].forEach(m=>ROUND_OF[m]='QF');
-['lsf','rsf'].forEach(m=>ROUND_OF[m]='SF');
-ROUND_OF['fin']='FINAL';
+/* ===== TREE ===== */
+const FIX={m1:['GER','PAR'],m2:['FRA','SWE'],m3:['RSA','CAN'],m4:['NED','MAR'],m5:['POR','CRO'],m6:['ESP','AUT'],m7:['USA','BIH'],m8:['BEL','SEN'],m9:['BRA','JPN'],m10:['CIV','NOR'],m11:['MEX','ECU'],m12:['ENG','COD'],m13:['ARG','CPV'],m14:['AUS','EGY'],m15:['SUI','ALG'],m16:['COL','GHA']};
+const TREE={l1:['m1','m2'],l2:['m3','m4'],l3:['m5','m6'],l4:['m7','m8'],r1:['m9','m10'],r2:['m11','m12'],r3:['m13','m14'],r4:['m15','m16'],lq1:['l1','l2'],lq2:['l3','l4'],rq1:['r1','r2'],rq2:['r3','r4'],lsf:['lq1','lq2'],rsf:['rq1','rq2'],fin:['lsf','rsf']};
+const ROUND_OF={}; ['m1','m2','m3','m4','m5','m6','m7','m8','m9','m10','m11','m12','m13','m14','m15','m16'].forEach(m=>ROUND_OF[m]='R32');
+['l1','l2','l3','l4','r1','r2','r3','r4'].forEach(m=>ROUND_OF[m]='R16'); ['lq1','lq2','rq1','rq2'].forEach(m=>ROUND_OF[m]='QF'); ['lsf','rsf'].forEach(m=>ROUND_OF[m]='SF'); ROUND_OF['fin']='FINAL';
+const ROUND_PTS={R32:1,R16:2,QF:3,SF:5,FINAL:10};
 
-/* preset brackets — picks[matchId] = team picked to WIN that match */
-const PRESETS = [
-  { id:'p_isai', name:'Isai', crit:'cat', color:'#F2935A',
-    upset:'<b>Japan</b> knock out Brazil',
-    picks:{ m1:'GER',m2:'FRA',m3:'CAN',m4:'NED',m5:'CRO',m6:'AUT',m7:'USA',m8:'BEL',m9:'JPN',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'AUS',m15:'ALG',m16:'COL',
-      l1:'GER',l2:'NED',l3:'CRO',l4:'BEL',r1:'NOR',r2:'ENG',r3:'ARG',r4:'ALG', lq1:'GER',lq2:'BEL',rq1:'ENG',rq2:'ARG', lsf:'GER',rsf:'ARG', fin:'ARG' } },
-  { id:'p_yazy', name:'Yazy', crit:'bird', color:'#E0A82E',
-    upset:'<b>Ghana</b> over Colombia',
-    picks:{ m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'AUT',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'SUI',m16:'GHA',
-      l1:'FRA',l2:'MAR',l3:'CRO',l4:'SEN',r1:'BRA',r2:'MEX',r3:'ARG',r4:'SUI', lq1:'MAR',lq2:'SEN',rq1:'BRA',rq2:'ARG', lsf:'MAR',rsf:'BRA', fin:'BRA' } },
-  { id:'p_blake', name:'Blake', crit:'fish', color:'#6E86B8',
-    upset:'<b>USA</b> reach the quarter-finals',
-    picks:{ m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'COL',
-      l1:'FRA',l2:'MAR',l3:'ESP',l4:'USA',r1:'BRA',r2:'ENG',r3:'ARG',r4:'COL', lq1:'FRA',lq2:'ESP',rq1:'BRA',rq2:'ARG', lsf:'ESP',rsf:'ARG', fin:'ESP' } },
-  { id:'p_ninon', name:'Ninon', crit:'bunny', color:'#D86A92',
-    upset:'<b>South Africa</b> stun Canada',
-    picks:{ m1:'GER',m2:'FRA',m3:'RSA',m4:'NED',m5:'POR',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'COL',
-      l1:'FRA',l2:'NED',l3:'ESP',l4:'SEN',r1:'BRA',r2:'MEX',r3:'ARG',r4:'COL', lq1:'FRA',lq2:'ESP',rq1:'BRA',rq2:'ARG', lsf:'FRA',rsf:'ARG', fin:'FRA' } },
-  { id:'p_maame', name:'Maame', crit:'frog', color:'#6FA84F',
-    upset:'<b>Cape Verde</b> topple Argentina',
-    picks:{ m1:'PAR',m2:'SWE',m3:'CAN',m4:'NED',m5:'CRO',m6:'AUT',m7:'BIH',m8:'SEN',m9:'BRA',m10:'CIV',m11:'MEX',m12:'COD',m13:'CPV',m14:'EGY',m15:'ALG',m16:'GHA',
-      l1:'PAR',l2:'CAN',l3:'CRO',l4:'SEN',r1:'CIV',r2:'COD',r3:'CPV',r4:'GHA', lq1:'CAN',lq2:'SEN',rq1:'CIV',rq2:'CPV', lsf:'CAN',rsf:'CPV', fin:'CPV' } }
+const PRESETS=[
+ {id:'p_isai',name:'Isai',crit:'cat',color:'#F2935A',upset:'<b>Japan</b> knock out Brazil',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'NED',m5:'CRO',m6:'AUT',m7:'USA',m8:'BEL',m9:'JPN',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'AUS',m15:'ALG',m16:'COL',l1:'GER',l2:'NED',l3:'CRO',l4:'BEL',r1:'NOR',r2:'ENG',r3:'ARG',r4:'ALG',lq1:'GER',lq2:'BEL',rq1:'ENG',rq2:'ARG',lsf:'GER',rsf:'ARG',fin:'ARG'}},
+ {id:'p_yazy',name:'Yazy',crit:'bird',color:'#E0A82E',upset:'<b>Ghana</b> over Colombia',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'AUT',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'SUI',m16:'GHA',l1:'FRA',l2:'MAR',l3:'CRO',l4:'SEN',r1:'BRA',r2:'MEX',r3:'ARG',r4:'SUI',lq1:'MAR',lq2:'SEN',rq1:'BRA',rq2:'ARG',lsf:'MAR',rsf:'BRA',fin:'BRA'}},
+ {id:'p_blake',name:'Blake',crit:'fish',color:'#6E86B8',upset:'<b>USA</b> reach the quarter-finals',picks:{m1:'GER',m2:'FRA',m3:'CAN',m4:'MAR',m5:'CRO',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'COL',l1:'FRA',l2:'MAR',l3:'ESP',l4:'USA',r1:'BRA',r2:'ENG',r3:'ARG',r4:'COL',lq1:'FRA',lq2:'ESP',rq1:'BRA',rq2:'ARG',lsf:'ESP',rsf:'ARG',fin:'ESP'}},
+ {id:'p_ninon',name:'Ninon',crit:'bunny',color:'#D86A92',upset:'<b>Portugal</b> send Croatia home',picks:{m1:'GER',m2:'FRA',m3:'RSA',m4:'NED',m5:'POR',m6:'ESP',m7:'USA',m8:'SEN',m9:'BRA',m10:'NOR',m11:'MEX',m12:'ENG',m13:'ARG',m14:'EGY',m15:'ALG',m16:'COL',l1:'FRA',l2:'NED',l3:'ESP',l4:'SEN',r1:'BRA',r2:'MEX',r3:'ARG',r4:'COL',lq1:'FRA',lq2:'ESP',rq1:'BRA',rq2:'ARG',lsf:'FRA',rsf:'ARG',fin:'FRA'}},
+ {id:'p_maame',name:'Maame',crit:'frog',color:'#6FA84F',upset:'<b>Cape Verde</b> topple Argentina',picks:{m1:'PAR',m2:'SWE',m3:'CAN',m4:'NED',m5:'CRO',m6:'AUT',m7:'BIH',m8:'SEN',m9:'BRA',m10:'CIV',m11:'MEX',m12:'COD',m13:'CPV',m14:'EGY',m15:'ALG',m16:'GHA',l1:'PAR',l2:'CAN',l3:'CRO',l4:'SEN',r1:'CIV',r2:'COD',r3:'CPV',r4:'GHA',lq1:'CAN',lq2:'SEN',rq1:'CIV',rq2:'CPV',lsf:'CAN',rsf:'CPV',fin:'CPV'}}
 ];
+let PEOPLE=PRESETS.slice();
 
-let PEOPLE = PRESETS.slice();   // will append stored brackets
+/* ===== LIVE RESULTS (edit as games finish) ===== */
+let RESULTS={ m3:'CAN' };  // South Africa 0-1 Canada (final)
+let UPDATED_THROUGH="Jun 28, 2026 · Brazil–Japan kicking off now";
 
-/* ============================ STORAGE ============================ */
-async function loadStored(){
-  if(!(window.storage && window.storage.list)) return [];
-  try{
-    const res = await window.storage.list('brackets:', true);
-    const keys = (res && res.keys) || [];
-    const out = [];
-    for(const k of keys){
-      try{ const r = await window.storage.get(k, true); if(r && r.value){ out.push(JSON.parse(r.value)); } }catch(e){}
-    }
-    return out;
-  }catch(e){ return []; }
-}
-async function saveBracket(b){
-  if(!(window.storage && window.storage.set)) return false;
-  try{ await window.storage.set('brackets:'+b.id, JSON.stringify(b), true); return true; }
-  catch(e){ return false; }
-}
+function eliminatedSet(){ const e=new Set(); for(const mid in RESULTS){ const w=RESULTS[mid]; let pair=FIX[mid]?FIX[mid]:(()=>{const[a,b]=TREE[mid];return [RESULTS[a],RESULTS[b]].filter(Boolean);})(); pair.forEach(t=>{if(t&&t!==w)e.add(t);}); } return e; }
+function pointsFor(p){ let s=0; for(const mid in RESULTS){ if(p.picks&&p.picks[mid]===RESULTS[mid]) s+=ROUND_PTS[ROUND_OF[mid]]||0; } return s; }
+let ELIM=new Set();
 
-/* ============================ OVERLAY HELPERS ============================ */
-function pick(person, matchId){ return person.picks ? person.picks[matchId] : null; }
-
-// returns [topSlot, bottomSlot]; each slot = ordered array of {team, people:[ids...]}
-function slotsFor(matchId){
-  if(FIX[matchId]){
-    const [a,b]=FIX[matchId];
-    const top=[{team:a, people:PEOPLE.filter(p=>pick(p,matchId)===a).map(p=>p.id)}];
-    const bot=[{team:b, people:PEOPLE.filter(p=>pick(p,matchId)===b).map(p=>p.id)}];
-    return [top,bot,true]; // true = R32 (show even if empty)
-  }
-  const [ca,cb]=TREE[matchId];
-  const build=(child)=>{
-    const map={};
-    PEOPLE.forEach(p=>{ const t=pick(p,child); if(t){ (map[t]=map[t]||[]).push(p.id); } });
-    return Object.keys(map).sort((x,y)=>map[y].length-map[x].length).map(t=>({team:t, people:map[t]}));
-  };
-  return [build(ca), build(cb), false];
-}
-
+/* ===== OVERLAY ===== */
+function pick(p,m){ return p.picks?p.picks[m]:null; }
 function personById(id){ return PEOPLE.find(p=>p.id===id); }
-
-/* ============================ BRACKET RENDER ============================ */
-const LEAF_PITCH=66, TOP=42;
-const leftLeaves=['m1','m2','m3','m4','m5','m6','m7','m8'];
-const rightLeaves=['m9','m10','m11','m12','m13','m14','m15','m16'];
-function centers(){
-  const c={};
-  leftLeaves.forEach((m,i)=> c[m]=TOP+i*LEAF_PITCH);
-  rightLeaves.forEach((m,i)=> c[m]=TOP+i*LEAF_PITCH);
-  const avg=(a,b)=>(c[a]+c[b])/2;
-  ['l1','l2','l3','l4','r1','r2','r3','r4','lq1','lq2','rq1','rq2','lsf','rsf'].forEach(k=>{ const[a,b]=TREE[k]; c[k]=avg(a,b); });
-  c['fin']=avg('lsf','rsf');
-  return c;
+function slotsFor(matchId){
+ if(FIX[matchId]){ const[a,b]=FIX[matchId];
+   return {top:[{team:a,people:PEOPLE.filter(p=>pick(p,matchId)===a).map(p=>p.id)}],bot:[{team:b,people:PEOPLE.filter(p=>pick(p,matchId)===b).map(p=>p.id)}],childA:matchId,childB:matchId}; }
+ const[ca,cb]=TREE[matchId];
+ const build=(child)=>{const map={};PEOPLE.forEach(p=>{const t=pick(p,child);if(t)(map[t]=map[t]||[]).push(p.id);});return Object.keys(map).sort((x,y)=>map[y].length-map[x].length).map(t=>({team:t,people:map[t]}));};
+ return {top:build(ca),bot:build(cb),childA:ca,childB:cb};
 }
-// column x by matchId
-const COLX = {
-  R32L:6, R16L:124, QFL:242, SFL:358, FIN:478, SFR:636, QFR:752, R16R:870, R32R:988
-};
-const NODEW={R32:104,R16:104,QF:104,SF:104,FINAL:140};
-function nodeX(matchId){
-  const r=ROUND_OF[matchId];
-  const left = leftLeaves.includes(matchId) || ['l1','l2','l3','l4','lq1','lq2','lsf'].includes(matchId);
-  if(matchId==='fin') return COLX.FIN;
-  if(r==='R32') return left?COLX.R32L:COLX.R32R;
-  if(r==='R16') return left?COLX.R16L:COLX.R16R;
-  if(r==='QF') return left?COLX.QFL:COLX.QFR;
-  if(r==='SF') return left?COLX.SFL:COLX.SFR;
-  return COLX.FIN;
-}
-function isLeftMatch(matchId){
-  return leftLeaves.includes(matchId) || ['l1','l2','l3','l4','lq1','lq2','lsf'].includes(matchId);
-}
-
-function nodeHTML(matchId){
-  const [top,bot,isR32]=slotsFor(matchId);
-  const r=ROUND_OF[matchId];
-  const flagW = r==='FINAL'?24 : 21;
-  const renderSlot=(slot)=>{
-    if(slot.length===0) return `<div class="slot empty"></div>`;
-    return `<div class="slot">`+slot.map(s=>{
-      const greyed = isR32 && s.people.length===0;
-      const dots = s.people.map(id=>{ const p=personById(id); return `<i style="background:${p?p.color:'#ccc'}"></i>`; }).join('');
-      return `<span class="tm${greyed?' grey':''}">${flagSVG(s.team,flagW)}<span class="dots">${dots}</span></span>`;
-    }).join('')+`</div>`;
-  };
-  return `<div class="node ${r==='FINAL'?'fin':''}">
-      ${renderSlot(top)}
-      <div class="divline"></div>
-      ${renderSlot(bot)}
-    </div>`;
-}
-
+const TOP=44,PITCH=84;
+const leftLeaves=['m1','m2','m3','m4','m5','m6','m7','m8'], rightLeaves=['m9','m10','m11','m12','m13','m14','m15','m16'];
+const leftSet=new Set([...leftLeaves,'l1','l2','l3','l4','lq1','lq2','lsf']);
+function centers(){const c={};leftLeaves.forEach((m,i)=>c[m]=TOP+i*PITCH);rightLeaves.forEach((m,i)=>c[m]=TOP+i*PITCH);const avg=(a,b)=>(c[a]+c[b])/2;['l1','l2','l3','l4','r1','r2','r3','r4','lq1','lq2','rq1','rq2','lsf','rsf'].forEach(k=>{const[a,b]=TREE[k];c[k]=avg(a,b);});c['fin']=avg('lsf','rsf');return c;}
+const GEO={R32L:{x:4,w:84},R16L:{x:104,w:96},QFL:{x:216,w:98},SFL:{x:330,w:98},FIN:{x:444,w:160},SFR:{x:620,w:98},QFR:{x:734,w:98},R16R:{x:848,w:96},R32R:{x:960,w:84}};
+function geo(m){const r=ROUND_OF[m];if(m==='fin')return GEO.FIN;const L=leftSet.has(m);if(r==='R32')return L?GEO.R32L:GEO.R32R;if(r==='R16')return L?GEO.R16L:GEO.R16R;if(r==='QF')return L?GEO.QFL:GEO.QFR;if(r==='SF')return L?GEO.SFL:GEO.SFR;return GEO.FIN;}
+function crewHTML(ids){ if(!ids.length)return ''; return `<span class="crew">`+ids.slice(0,7).map(id=>{const p=personById(id);return critSVG(p?p.crit:'cat');}).join('')+`</span>`; }
+function chipHTML(team,ids,childId){ const elim=ELIM.has(team); const correct=RESULTS[childId]===team;
+ return `<span class="tm${elim?' grey':''}">${crewHTML(ids)}<span class="flag ${correct?'holo':''}" style="width:34px;height:23px"><svg viewBox="0 0 24 16" width="34" height="23">${flagInner(team)}</svg></span></span>`; }
+function nodeHTML(m){ const s=slotsFor(m); const slot=(arr,cid)=>arr.length?`<div class="slot">`+arr.map(o=>chipHTML(o.team,o.people,cid)).join('')+`</div>`:`<div class="slot empty"></div>`;
+ return `<div class="node ${ROUND_OF[m]==='FINAL'?'finN':''}">${slot(s.top,s.childA)}<div class="divline"></div>${slot(s.bot,s.childB)}</div>`; }
 function renderBracket(){
-  const svg=document.getElementById('bracketSvg');
-  const c=centers();
-  const allMatches=[...leftLeaves,...rightLeaves,'l1','l2','l3','l4','r1','r2','r3','r4','lq1','lq2','rq1','rq2','lsf','rsf','fin'];
-
-  // connectors
-  let paths='';
-  Object.keys(TREE).forEach(parent=>{
-    const [a,b]=TREE[parent];
-    const px=nodeX(parent), pw=NODEW[ROUND_OF[parent]]||104, py=c[parent];
-    [a,b].forEach(child=>{
-      const cx=nodeX(child), cw=NODEW[ROUND_OF[child]]||104, cy=c[child];
-      const childLeft=isLeftMatch(child);
-      let x1,x2,mid;
-      if(childLeft){ x1=cx+cw; x2=px; }   // child on left, parent to its right
-      else { x1=cx; x2=px+pw; }            // child on right, parent to its left
-      mid=(x1+x2)/2;
-      paths+=`<path d="M${x1} ${cy} H${mid} V${py} H${x2}" fill="none" stroke="#C9B79A" stroke-width="1.6" opacity=".8"/>`;
-    });
-  });
-
-  // nodes
-  let nodes='';
-  allMatches.forEach(m=>{
-    const x=nodeX(m), w=NODEW[ROUND_OF[m]]||104, cy=c[m];
-    const h = ROUND_OF[m]==='FINAL'?78:60;
-    const y=cy-h/2;
-    nodes+=`<foreignObject x="${x}" y="${y}" width="${w}" height="${h}">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="fo">${nodeHTML(m)}</div>
-    </foreignObject>`;
-  });
-
-  // champion crown above final
-  const champX=COLX.FIN+NODEW.FINAL/2;
-  const crown=`<text x="${champX}" y="18" text-anchor="middle" font-family="Pixelify Sans" font-size="15" fill="#C75C52">CHAMPION ↑</text>`;
-  const r32lab=`<text x="${COLX.R32L+52}" y="592" text-anchor="middle" font-family="Pixelify Sans" font-size="12" fill="#9c8a72">Round of 32</text>
-    <text x="${COLX.R32R+52}" y="592" text-anchor="middle" font-family="Pixelify Sans" font-size="12" fill="#9c8a72">Round of 32</text>`;
-
-  svg.innerHTML = `
-    <style>
-      .fo{width:100%;height:100%}
-      .node{height:100%;background:#FFFDF7;border:1.6px solid #E2D2B6;border-radius:8px;
-        box-shadow:0 1.5px 0 rgba(70,55,38,.10);display:flex;flex-direction:column;justify-content:center;
-        padding:2px 3px;overflow:hidden}
-      .node.fin{border-color:#EE7E54;box-shadow:0 0 0 2px rgba(238,126,84,.18)}
-      .slot{display:flex;flex-wrap:wrap;gap:2px 3px;align-items:center;min-height:13px;padding:1px 1px}
-      .slot.empty{min-height:11px}
-      .divline{height:1.2px;background:#E2D2B6;margin:2px 1px}
-      .tm{display:inline-flex;align-items:center;gap:1px;position:relative}
-      .tm.grey{opacity:.32;filter:grayscale(.7)}
-      .dots{display:inline-flex;gap:1px}
-      .dots i{width:5px;height:5px;border-radius:50%;border:1px solid #463726;display:inline-block}
-      .flag{display:inline-block;border:1.4px solid #463726;border-radius:2px;overflow:hidden;background:#fff}
-      .flag svg{display:block}
-    </style>
-    ${paths}
-    ${nodes}
-    ${crown}
-    ${r32lab}
-  `;
+ ELIM=eliminatedSet(); const svg=document.getElementById('bracketSvg'),c=centers();
+ const all=[...leftLeaves,...rightLeaves,'l1','l2','l3','l4','r1','r2','r3','r4','lq1','lq2','rq1','rq2','lsf','rsf','fin'];
+ let paths=''; Object.keys(TREE).forEach(parent=>{const[a,b]=TREE[parent],pg=geo(parent),py=c[parent];[a,b].forEach(child=>{const cg=geo(child),cy=c[child],L=leftSet.has(child);let x1,x2;if(L){x1=cg.x+cg.w;x2=pg.x;}else{x1=cg.x;x2=pg.x+pg.w;}const mid=(x1+x2)/2;paths+=`<path d="M${x1} ${cy} H${mid} V${py} H${x2}" fill="none" stroke="#CDB78F" stroke-width="1.6" opacity=".75"/>`;});});
+ let nodes=''; all.forEach(m=>{const g=geo(m),cy=c[m],foh=ROUND_OF[m]==='FINAL'?230:170;nodes+=`<foreignObject x="${g.x}" y="${cy-foh/2}" width="${g.w}" height="${foh}" style="overflow:visible"><div xmlns="http://www.w3.org/1999/xhtml" class="fo">${nodeHTML(m)}</div></foreignObject>`;});
+ const fc=GEO.FIN.x+GEO.FIN.w/2;
+ const finLabel=`<text x="${fc}" y="${c['fin']-72}" text-anchor="middle" font-family="Pixelify Sans" font-size="15" fill="#C75C52">✦ FINAL ✦</text>`;
+ const r32lab=`<text x="${GEO.R32L.x+42}" y="692" text-anchor="middle" font-family="Pixelify Sans" font-size="12" fill="#8a7257">Round of 32</text><text x="${GEO.R32R.x+42}" y="692" text-anchor="middle" font-family="Pixelify Sans" font-size="12" fill="#8a7257">Round of 32</text>`;
+ svg.innerHTML=paths+nodes+finLabel+r32lab;
+ document.getElementById('liveTag').style.display=Object.keys(RESULTS).length?'inline-flex':'none';
 }
 
-/* ============================ PANELS ============================ */
-function renderLegend(){
-  document.getElementById('legend').innerHTML = PEOPLE.map(p=>
-    `<span class="who">${critSVG(p.crit)}<span class="dot" style="background:${p.color}"></span>${p.name}</span>`
-  ).join('');
-}
-function renderChamps(){
-  document.getElementById('champGrid').innerHTML = PEOPLE.map(p=>{
-    const champ=pick(p,'fin');
-    return `<div class="pcard"><div class="top">${critSVG(p.crit)}
-      <div><div class="nm">${p.name}</div><div class="role">the ${CRIT_LABEL[p.crit]}</div></div></div>
-      <div class="champrow"><span class="lab">CHAMPION</span>${flagSVG(champ,30)}<span class="team">${TEAMS[champ]||champ}</span></div>
-    </div>`;
-  }).join('');
-}
-function renderUpsets(){
-  document.getElementById('upsetGrid').innerHTML = PEOPLE.map(p=>
-    `<div class="pcard upsetcard"><div class="top">${critSVG(p.crit)}
-      <div><div class="nm">${p.name}</div><div class="role">biggest-shock call</div></div></div>
-      <div class="ucall">${p.upset||'—'}</div></div>`
-  ).join('');
-}
-function renderStandings(){
-  const rows = PEOPLE.map(p=>`<tr><td>${p.name}</td><td>${TEAMS[pick(p,'fin')]||''}</td><td>0</td></tr>`).join('');
-  document.getElementById('standTable').innerHTML =
-    `<tr><th>Player</th><th>Champion pick</th><th>Points</th></tr>${rows}`;
-  document.getElementById('kickNote').textContent = 'Scoring begins at kickoff — first knockout games land in early July 2026. Everyone starts on 0.';
-}
-function renderAll(){ renderBracket(); renderLegend(); renderChamps(); renderUpsets(); renderStandings(); }
+/* ===== PANELS ===== */
+function renderLegend(){document.getElementById('legend').innerHTML=PEOPLE.map(p=>`<span class="who">${critSVG(p.crit)}${p.name}</span>`).join('');}
+function renderChamps(){document.getElementById('champGrid').innerHTML=PEOPLE.map(p=>{const ch=pick(p,'fin');return `<div class="pcard"><div class="top">${critSVG(p.crit)}<div><div class="nm">${p.name}</div><div class="role">the ${CRIT_LABEL[p.crit]||'critter'}</div></div></div><div class="champrow"><span class="lab">CHAMPION</span><span class="flag holo" style="width:34px;height:23px"><svg viewBox="0 0 24 16" width="34" height="23">${flagInner(ch)}</svg></span><span class="team">${TEAMS[ch]||ch}</span></div></div>`;}).join('');}
+function renderUpsets(){document.getElementById('upsetGrid').innerHTML=PEOPLE.map(p=>`<div class="pcard upsetcard"><div class="top">${critSVG(p.crit)}<div><div class="nm">${p.name}</div><div class="role">biggest-shock call</div></div></div><div class="ucall">${p.upset||'—'}</div></div>`).join('');}
+function renderStandings(){const rows=PEOPLE.map(p=>({p,pts:pointsFor(p)})).sort((a,b)=>b.pts-a.pts);document.getElementById('standTable').innerHTML=`<tr><th></th><th>Player</th><th>Champion pick</th><th style="text-align:right">Pts</th></tr>`+rows.map((r,i)=>`<tr><td class="rk">${i+1}</td><td><div class="nmcell">${critSVG(r.p.crit)}${r.p.name}</div></td><td>${TEAMS[pick(r.p,'fin')]||''}</td><td class="pts">${r.pts}</td></tr>`).join('');document.getElementById('kickNote').textContent='Updated through '+UPDATED_THROUGH+'. Points recompute automatically as each result lands.';}
+function renderAll(){renderBracket();renderLegend();renderChamps();renderUpsets();renderStandings();}
 
-/* ============================ TABS ============================ */
-document.querySelectorAll('.tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('show'));
-    t.classList.add('active');
-    document.getElementById('tab-'+t.dataset.tab).classList.add('show');
-  });
+/* ===== TABS ===== */
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('show'));t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('show');}));
+
+/* ===== ZOOM / PAN ===== */
+const bv=document.getElementById('bv'),stage=document.getElementById('bvstage');
+let zoom=1,px=0,py=0,drag=false,lastX=0,lastY=0;
+function applyT(){zoom=Math.max(1,Math.min(6,zoom));if(zoom===1){px=0;py=0;}const w=bv.clientWidth,h=bv.clientHeight;px=Math.min(0,Math.max(px,w-w*zoom));py=Math.min(0,Math.max(py,h-h*zoom));stage.style.transform=`translate(${px}px,${py}px) scale(${zoom})`;}
+function zoomAt(factor,cx,cy){const w=bv.clientWidth,h=bv.clientHeight;const ox=cx==null?w/2:cx,oy=cy==null?h/2:cy;const nz=Math.max(1,Math.min(6,zoom*factor));const k=nz/zoom;px=ox-(ox-px)*k;py=oy-(oy-py)*k;zoom=nz;applyT();}
+document.querySelectorAll('.zoomctl button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const z=b.dataset.z;if(z==='in')zoomAt(1.35);else if(z==='out')zoomAt(1/1.35);else{zoom=1;px=0;py=0;applyT();}}));
+bv.addEventListener('wheel',e=>{e.preventDefault();const r=bv.getBoundingClientRect();const step=Math.min(Math.abs(e.deltaY),40)/40;const f=1+0.05*step;zoomAt(e.deltaY<0?f:1/f,e.clientX-r.left,e.clientY-r.top);},{passive:false});
+bv.addEventListener('pointerdown',e=>{if(e.target.closest('.zoomctl'))return;drag=true;bv.classList.add('drag');lastX=e.clientX;lastY=e.clientY;bv.setPointerCapture(e.pointerId);});
+bv.addEventListener('pointermove',e=>{if(!drag)return;px+=e.clientX-lastX;py+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;applyT();});
+bv.addEventListener('pointerup',e=>{drag=false;bv.classList.remove('drag');});
+bv.addEventListener('pointercancel',()=>{drag=false;bv.classList.remove('drag');});
+window.addEventListener('resize',applyT);
+
+/* ===== MUSIC (original chiptune) ===== */
+let actx=null,musicOn=false,musTimer=null,master=null;
+const NF={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880.00,B5:987.77,C6:1046.50,C3:130.81,G3:196.00,A2:110.00,F3:174.61};
+const MELODY=[['G4',.5],['C5',.5],['E5',.5],['G5',.5],['E5',.5],['C5',.5],['D5',1],['G4',.5],['D5',.5],['F5',.5],['A5',.5],['F5',.5],['D5',.5],['E5',1],['A4',.5],['E5',.5],['G5',.5],['C6',.5],['B5',.5],['G5',.5],['A5',1],['F5',.5],['E5',.5],['D5',.5],['C5',.5],['G5',1],['C5',1]];
+const BASS=[['C3',0],['G3',4],['A2',8],['F3',12]];
+function blip(freq,t,dur,type,g){const o=actx.createOscillator(),gn=actx.createGain();o.type=type;o.frequency.value=freq;o.connect(gn);gn.connect(master);gn.gain.setValueAtTime(0,t);gn.gain.linearRampToValueAtTime(g,t+0.015);gn.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.start(t);o.stop(t+dur+0.03);}
+function loop(){const bpm=128,B=60/bpm;let t=actx.currentTime+0.06;MELODY.forEach(([n,b])=>{const f=NF[n];if(f)blip(f,t,b*B*0.92,'square',0.055);t+=b*B;});BASS.forEach(([n,beat])=>{blip(NF[n]/2,actx.currentTime+0.06+beat*B,B*1.8,'triangle',0.06);});const total=MELODY.reduce((s,x)=>s+x[1],0)*B;musTimer=setTimeout(loop,total*1000);}
+document.getElementById('musicBtn').addEventListener('click',function(){
+ if(!actx){actx=new (window.AudioContext||window.webkitAudioContext)();master=actx.createGain();master.gain.value=0.5;master.connect(actx.destination);}
+ if(actx.state==='suspended')actx.resume();
+ musicOn=!musicOn;
+ if(musicOn){this.textContent='♪ Music ✓';loop();}else{this.textContent='♪ Music';clearTimeout(musTimer);}
 });
 
-/* ============================ ADD BRACKET FLOW ============================ */
-const CRIT_COLORS = {cat:'#F2935A', bird:'#E0A82E', fish:'#6E86B8', bunny:'#D86A92', frog:'#6FA84F'};
-let draft = null;
-function newDraft(){ return { id:'u_'+Date.now().toString(36), name:'', crit:'cat', color:CRIT_COLORS.cat, upset:'', picks:{} }; }
+/* ===== SHARE CARDS ===== */
+function cardFlag(code,x,y,w){const s=w/24;return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-0.8" y="-0.8" width="25.6" height="17.6" rx="2" fill="#463726"/>${flagInner(code)}</g>`;}
+function cardCrit(t,x,y,sc){return `<g transform="translate(${x},${y}) scale(${sc})">${CRIT[t]||CRIT.cat}</g>`;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function frame(w,h,inner,gid){return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" font-family="Arial,Helvetica,sans-serif"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BCE4F5"/><stop offset="0.34" stop-color="#A6DBD2"/><stop offset="0.62" stop-color="#FCE6BE"/><stop offset="1" stop-color="#F2C2CE"/></linearGradient><radialGradient id="${gid}s" cx="0.5" cy="0.04" r="0.6"><stop offset="0" stop-color="#FFF6D6" stop-opacity="0.95"/><stop offset="1" stop-color="#FFF6D6" stop-opacity="0"/></radialGradient></defs><rect width="${w}" height="${h}" fill="url(#${gid})"/><rect width="${w}" height="${h}" fill="url(#${gid}s)"/><rect x="7" y="7" width="${w-14}" height="${h-14}" rx="24" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.75"/>${inner}<text x="${w-26}" y="${h-22}" text-anchor="end" font-size="19" font-weight="800" fill="#C75C52">WORLD CUP '26</text></svg>`;}
+function joinNames(a){if(!a.length)return 'nobody';if(a.length===1)return a[0];if(a.length===2)return a[0]+' & '+a[1];return a.slice(0,-1).join(', ')+' & '+a[a.length-1];}
+function backers(mid,team){return PEOPLE.filter(p=>pick(p,mid)===team);}
 
-function winnersForRound(round){
-  // returns array of {matchId, a, b} matchups, pulling a/b from draft picks of children
-  const groups = {
-    R32: leftLeaves.concat(rightLeaves).map(m=>({matchId:m, a:FIX[m][0], b:FIX[m][1]})),
-    R16: ['l1','l2','l3','l4','r1','r2','r3','r4'],
-    QF: ['lq1','lq2','rq1','rq2'],
-    SF: ['lsf','rsf'],
-    FINAL: ['fin']
-  };
-  if(round==='R32') return groups.R32;
-  return groups[round].map(m=>{
-    const [ca,cb]=TREE[m];
-    return {matchId:m, a:draft.picks[ca], b:draft.picks[cb]};
-  });
-}
-const ROUND_SEQ=['R32','R16','QF','SF','FINAL'];
-const ROUND_TITLE={R32:'Round of 32 — pick 16 winners', R16:'Round of 16', QF:'Quarter-finals', SF:'Semi-finals', FINAL:'The Final — crown your champion'};
+/* hidden bank of country-flavoured one-liners, one per R32 fixture */
+const QUIP={
+ m1:"Germany's machine meets Paraguay's giant-killers", m2:"Les Bleus run into the Scandinavian wall",
+ m3:"Bafana Bafana take on the Maple Leaf", m4:"Total Football vs the Atlas Lions",
+ m5:"Portugal's stars vs the Checkerboard", m6:"La Roja's tiki-taka vs Austrian grit",
+ m7:"Stars and Stripes vs the Bosnian Dragons", m8:"Red Devils vs the Lions of Teranga",
+ m9:"Samba meets the Samurai Blue", m10:"The Elephants charge at Haaland's Vikings",
+ m11:"El Tri vs La Tri — a tricolor showdown", m12:"Three Lions vs the Leopards",
+ m13:"Messi's champions vs the Blue Sharks' dream", m14:"Socceroos vs the Pharaohs",
+ m15:"Swiss clockwork vs the Desert Foxes", m16:"Los Cafeteros vs the Black Stars"
+};
+const ORDER=['m3','m9','m1','m4','m10','m2','m11','m12','m8','m7','m6','m5','m13','m14','m15','m16'];
+const HIGHER=['l1','l2','l3','l4','r1','r2','r3','r4','lq1','lq2','rq1','rq2','lsf','rsf','fin'];
+function knownUpcoming(){const out=[];ORDER.forEach(m=>{if(!RESULTS[m])out.push({matchId:m,a:FIX[m][0],b:FIX[m][1]});});HIGHER.forEach(m=>{const[ca,cb]=TREE[m];if(RESULTS[ca]&&RESULTS[cb]&&!RESULTS[m])out.push({matchId:m,a:RESULTS[ca],b:RESULTS[cb]});});return out;}
+function knownResults(){const ord=ORDER.concat(HIGHER);return ord.filter(m=>RESULTS[m]).map(m=>{let a,b;if(FIX[m]){[a,b]=FIX[m];}else{const[ca,cb]=TREE[m];a=RESULTS[ca];b=RESULTS[cb];}return {matchId:m,a,b,winner:RESULTS[m]};});}
 
-function openAdd(){
-  draft=newDraft();
-  renderStep('intro');
-  document.getElementById('addModal').classList.add('show');
-}
-function closeAdd(){ document.getElementById('addModal').classList.remove('show'); }
+function upcomingTitle(mid,a,b){const ba=backers(mid,a),bb=backers(mid,b);if(ba.length===1&&bb.length>=2)return `${ba[0].name} stands alone on ${TEAMS[a]}`;if(bb.length===1&&ba.length>=2)return `${bb[0].name} stands alone on ${TEAMS[b]}`;return QUIP[mid]||`${TEAMS[a]} vs ${TEAMS[b]}`;}
+function crewRow(arr,cx,cy,sc){return arr.map((p,i)=>cardCrit(p.crit,cx-((arr.length-1)*24)/2+i*24,cy,sc||1.3)).join('');}
 
-function renderStep(step){
-  const sheet=document.getElementById('sheet');
-  if(step==='intro'){
-    sheet.innerHTML=`<button class="closex" onclick="closeAdd()">✕</button>
-      <h2>Add your bracket</h2>
-      <div class="sub">Pick a name and a critter, then click your way through the rounds. Your picks join the shared tree everyone sees.</div>
-      <div class="field"><label>Your name</label><input id="nm" type="text" maxlength="14" placeholder="e.g. Sam" value="${draft.name}"/></div>
-      <div class="field"><label>Pick your critter</label>
-        <div class="critpick">${Object.keys(CRIT).map(c=>`
-          <div class="critopt ${draft.crit===c?'sel':''}" data-c="${c}">${critSVG(c)}<small>${CRIT_LABEL[c]}</small></div>`).join('')}</div>
-      </div>
-      <div class="steprow"><button class="btn primary" id="toR32">Start picking →</button></div>`;
-    sheet.querySelectorAll('.critopt').forEach(o=>o.addEventListener('click',()=>{
-      draft.crit=o.dataset.c; draft.color=CRIT_COLORS[draft.crit];
-      sheet.querySelectorAll('.critopt').forEach(x=>x.classList.remove('sel')); o.classList.add('sel');
-    }));
-    sheet.querySelector('#nm').addEventListener('input',e=>draft.name=e.target.value.trim());
-    sheet.querySelector('#toR32').addEventListener('click',()=>{
-      if(!draft.name){ draft.name='Player'; }
-      renderStep('R32');
-    });
-    return;
-  }
-  // a round step
-  const round=step;
-  const matchups=winnersForRound(round);
-  const body = matchups.map(mu=>{
-    const sel=draft.picks[mu.matchId];
-    const opt=(code)=> code? `<div class="opt ${sel===code?'sel':''}" data-m="${mu.matchId}" data-t="${code}">${flagSVG(code,26)}<span>${TEAMS[code]||code}</span></div>` : `<div class="opt" style="opacity:.4">—</div>`;
-    return `<div class="matchpick">${opt(mu.a)}<span class="vs">vs</span>${opt(mu.b)}</div>`;
-  }).join('');
-  const idx=ROUND_SEQ.indexOf(round);
-  const nextRound = ROUND_SEQ[idx+1];
-  sheet.innerHTML=`<button class="closex" onclick="closeAdd()">✕</button>
-    <h2>${draft.name}'s bracket</h2>
-    <div class="roundlab">${ROUND_TITLE[round]}</div>
-    ${body}
-    ${round==='FINAL'?`<div class="field" style="margin-top:14px"><label>Biggest-upset call (optional)</label>
-      <input id="ups" type="text" maxlength="60" placeholder="e.g. Cape Verde topple Argentina" value="${(draft.upset||'').replace(/<[^>]+>/g,'')}"/></div>`:''}
-    <div class="steprow">
-      ${idx>0?`<button class="btn" id="back">← Back</button>`:''}
-      <button class="btn primary" id="next" disabled>${nextRound?'Next round →':'Save my bracket ✓'}</button>
-      <span class="savednote" id="cnt"></span>
-    </div>`;
-  // option clicks
-  sheet.querySelectorAll('.opt[data-m]').forEach(o=>o.addEventListener('click',()=>{
-    draft.picks[o.dataset.m]=o.dataset.t;
-    // clear downstream picks that depended on this (simple: wipe later rounds)
-    clearDownstream(round);
-    renderStep(round);
-  }));
-  const need=matchups.length;
-  const have=matchups.filter(mu=>draft.picks[mu.matchId]).length;
-  sheet.querySelector('#cnt').textContent=`${have}/${need} picked`;
-  const nextBtn=sheet.querySelector('#next');
-  nextBtn.disabled = have<need;
-  if(round==='FINAL'){ const u=sheet.querySelector('#ups'); if(u) u.addEventListener('input',e=>draft.upset=e.target.value); }
-  nextBtn.addEventListener('click', async ()=>{
-    if(nextRound){ renderStep(nextRound); }
-    else { await finishDraft(); }
-  });
-  const backBtn=sheet.querySelector('#back');
-  if(backBtn) backBtn.addEventListener('click',()=>renderStep(ROUND_SEQ[idx-1]));
-}
-function clearDownstream(round){
-  const idx=ROUND_SEQ.indexOf(round);
-  ROUND_SEQ.slice(idx+1).forEach(r=>{
-    winnersForRound(r).forEach(mu=>{ delete draft.picks[mu.matchId]; });
-  });
-}
-async function finishDraft(){
-  if(!draft.upset) draft.upset='—';
-  const saved = await saveBracket(draft);
-  PEOPLE = PEOPLE.concat([draft]);
-  renderAll();
-  const sheet=document.getElementById('sheet');
-  sheet.innerHTML=`<button class="closex" onclick="closeAdd()">✕</button>
-    <h2>You're in! ${critSVG(draft.crit)}</h2>
-    <div class="sub">${draft.name}'s picks are now layered onto the tree${saved?' and saved to the shared board — anyone who opens this page will see them.':'. (Saving to the shared board is unavailable here, but your picks show for this session.)'}</div>
-    <div class="steprow"><button class="btn primary" onclick="closeAdd()">See the bracket</button></div>`;
-}
-document.getElementById('openAdd').addEventListener('click',openAdd);
-window.closeAdd=closeAdd;
+function matchCardUpcoming(mid,a,b){const w=900,h=600;const ba=backers(mid,a),bb=backers(mid,b);
+ const title=upcomingTitle(mid,a,b);const quip=QUIP[mid]||'Win or go home';
+ const lineA=ba.length?`${joinNames(ba.map(p=>p.name))} on ${TEAMS[a]}`:`nobody on ${TEAMS[a]}`;
+ const lineB=bb.length?`${joinNames(bb.map(p=>p.name))} on ${TEAMS[b]}`:`nobody on ${TEAMS[b]}`;
+ const inner=`<text x="450" y="62" text-anchor="middle" font-size="20" font-weight="800" fill="#C75C52">UP NEXT</text>
+  <text x="450" y="108" text-anchor="middle" font-size="33" font-weight="800" fill="#463726">${esc(title)}</text>
+  <text x="450" y="142" text-anchor="middle" font-size="19" font-weight="700" fill="#6E5A45">${esc(quip)}</text>
+  ${cardFlag(a,150,205,200)}${cardFlag(b,550,205,200)}
+  <text x="450" y="312" text-anchor="middle" font-size="38" font-weight="800" fill="#6E5A45">vs</text>
+  ${crewRow(ba,250,430,1.35)}<text x="250" y="478" text-anchor="middle" font-size="17" font-weight="800" fill="#463726">${esc(lineA)}</text>
+  ${crewRow(bb,650,430,1.35)}<text x="650" y="478" text-anchor="middle" font-size="17" font-weight="800" fill="#463726">${esc(lineB)}</text>`;
+ return {svg:frame(w,h,inner,'gmu'),w,h,file:'wc26-'+mid+'-preview.png',title};}
 
-/* ============================ INIT ============================ */
-(async function init(){
-  const stored = await loadStored();
-  // avoid dupes by id
-  const seen=new Set(PEOPLE.map(p=>p.id));
-  stored.forEach(b=>{ if(b && b.id && !seen.has(b.id)){ PEOPLE.push(b); seen.add(b.id); } });
-  renderAll();
-})();
+function matchCardResult(mid,a,b,winner){const w=900,h=600;const loser=winner===a?b:a;
+ const right=backers(mid,winner),wrong=backers(mid,loser);
+ const fw=300,fx=300,fy=210,fh=Math.round(fw*16/24);
+ const inner=`<text x="450" y="62" text-anchor="middle" font-size="20" font-weight="800" fill="#C75C52">FULL-TIME</text>
+  <text x="450" y="108" text-anchor="middle" font-size="34" font-weight="800" fill="#463726">${esc(TEAMS[winner])} march on!</text>
+  <text x="450" y="142" text-anchor="middle" font-size="18" font-weight="700" fill="#6E5A45">${esc(TEAMS[winner])} beat ${esc(TEAMS[loser])} · ${esc(QUIP[mid]||'')}</text>
+  <rect x="${fx-6}" y="${fy-6}" width="${fw+12}" height="${fh+12}" rx="10" fill="none" stroke="#F4C430" stroke-width="6"/>${cardFlag(winner,fx,fy,fw)}
+  <text x="450" y="${fy+fh+58}" text-anchor="middle" font-size="20" font-weight="800" fill="#2f7a3a">✓ Called it: ${esc(joinNames(right.map(p=>p.name)))}</text>
+  <text x="450" y="${fy+fh+92}" text-anchor="middle" font-size="20" font-weight="800" fill="#C75C52">✗ Missed it: ${esc(joinNames(wrong.map(p=>p.name)))}</text>`;
+ return {svg:frame(w,h,inner,'gmr'),w,h,file:'wc26-'+mid+'-result.png',title:TEAMS[winner]+' march on'};}
+
+function champCard(){const w=900,h=600;let inner=`<text x="46" y="74" font-size="38" font-weight="800" fill="#C75C52">Five friends, five winners</text><text x="46" y="104" font-size="20" font-weight="700" fill="#6E5A45">who's lifting the trophy?</text>`;PEOPLE.slice(0,5).forEach((p,i)=>{const y=150+i*84;const ch=pick(p,'fin');inner+=`<g transform="translate(46,${y})">${cardCrit(p.crit,26,18,1.7)}<text x="64" y="26" font-size="26" font-weight="800" fill="#463726">${esc(p.name)}</text>${cardFlag(ch,360,2,92)}<text x="470" y="34" font-size="24" font-weight="800" fill="#463726">${esc(TEAMS[ch])}</text></g>`;});return {svg:frame(w,h,inner,'gc'),w,h,file:'worldcup26-champions.png',title:"World Cup '26 — the calls"};}
+
+/* robust export: works fully on a hosted site; degrades gracefully in the sandboxed preview */
+function exportCard(card,statusEl){
+ const fail=(msg)=>{ if(statusEl) statusEl.textContent=msg; };
+ try{
+  const img=new Image();
+  img.onload=()=>{ try{
+    const cv=document.createElement('canvas');cv.width=card.w*2;cv.height=card.h*2;const ctx=cv.getContext('2d');ctx.scale(2,2);ctx.drawImage(img,0,0,card.w,card.h);
+    cv.toBlob(async(blob)=>{ if(!blob){fail('Saving is blocked in this preview — screenshot the card, or it saves fine on the hosted site.');return;}
+      const file=new File([blob],card.file,{type:'image/png'});
+      if(navigator.canShare&&navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file],title:card.title}); if(statusEl)statusEl.textContent='Shared!'; return; }catch(e){} }
+      try{ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=card.file;document.body.appendChild(a);a.click();a.remove(); if(statusEl)statusEl.textContent='Saved to your downloads.'; }
+      catch(e){ fail('Saving is blocked in this preview — screenshot the card, or it saves fine on the hosted site.'); }
+    },'image/png');
+  }catch(e){ fail('Saving is blocked in this preview — screenshot the card, or it saves fine on the hosted site.'); } };
+  img.onerror=()=>fail('Image export is blocked inside the Claude preview — it works once the site is hosted. Screenshot the card for now.');
+  img.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(card.svg)));
+ }catch(e){ fail('Image export is blocked inside the Claude preview — it works once the site is hosted. Screenshot the card for now.'); }
+}
+
+/* ===== SHARE MODAL ===== */
+let shareMode='up', shareMid=null;  // 'up' | 'res' | 'champs'
+function buildShareCard(){
+ if(shareMode==='champs') return champCard();
+ if(shareMode==='res'){ const list=knownResults(); const r=list.find(x=>x.matchId===shareMid)||list[0]; return r?matchCardResult(r.matchId,r.a,r.b,r.winner):null; }
+ const list=knownUpcoming(); const m=list.find(x=>x.matchId===shareMid)||list[0]; return m?matchCardUpcoming(m.matchId,m.a,m.b):null;
+}
+function renderShare(){
+ const sh=document.getElementById('shareSheet');
+ const close=`<button class="closex" onclick="document.getElementById('shareModal').classList.remove('show')">✕</button>`;
+ if(shareMode==='champs'){ const card=champCard();
+   sh.innerHTML=`${close}<h2>The five champions</h2><div class="sub">One image with everyone's winner pick — saves for iMessage, stories, anywhere.</div><div class="preview">${card.svg}</div><div class="steprow"><button class="btn primary" id="dl">⤓ Save / share image</button><span id="shareStatus" class="savednote"></span></div>`;
+   sh.querySelector('#dl').addEventListener('click',()=>exportCard(champCard(),sh.querySelector('#shareStatus'))); return; }
+ const upcoming=knownUpcoming(), results=knownResults();
+ const list = shareMode==='res'?results:upcoming;
+ if(!shareMid || !list.find(x=>x.matchId===shareMid)) shareMid = list.length?list[0].matchId:null;
+ const card=buildShareCard();
+ const optLabel=(x)=> shareMode==='res' ? `${TEAMS[x.winner]} beat ${TEAMS[x.winner===x.a?x.b:x.a]}` : `${TEAMS[x.a]} vs ${TEAMS[x.b]}`;
+ sh.innerHTML=`${close}<h2>Share a match card</h2>
+  <div class="sub">A fun image for each match, with a one-liner about the tie and who in the group called it. The list grows automatically as games are played.</div>
+  <div class="shareopts"><div class="so ${shareMode!=='res'?'sel':''}" data-m="up">📅 Upcoming (${upcoming.length})</div><div class="so ${shareMode==='res'?'sel':''}" data-m="res">⏱ Results (${results.length})</div></div>
+  <div class="pickwrap"><label class="picklabel">▼ Pick which match (defaults to what's next)</label>
+    <select id="selMatch" class="bigsel">${list.map(x=>`<option value="${x.matchId}" ${x.matchId===shareMid?'selected':''}>${optLabel(x)}</option>`).join('')||'<option>None yet — check back after kickoff</option>'}</select></div>
+  ${card?`<div class="preview">${card.svg}</div><div class="steprow"><button class="btn primary" id="dl">⤓ Save / share image</button><span id="shareStatus" class="savednote"></span></div>`:`<div class="sub">No ${shareMode==='res'?'results':'matches'} here yet — they'll appear as the cup unfolds.</div>`}`;
+ sh.querySelectorAll('.so').forEach(o=>o.addEventListener('click',()=>{shareMode=o.dataset.m;shareMid=null;renderShare();}));
+ const sm=sh.querySelector('#selMatch'); if(sm)sm.addEventListener('change',e=>{shareMid=e.target.value;renderShare();});
+ const dl=sh.querySelector('#dl'); if(dl)dl.addEventListener('click',()=>exportCard(buildShareCard(),sh.querySelector('#shareStatus')));
+}
+document.getElementById('shareBtn').addEventListener('click',()=>{shareMode='up';shareMid=null;renderShare();document.getElementById('shareModal').classList.add('show');});
+document.getElementById('champShare').addEventListener('click',()=>{shareMode='champs';renderShare();document.getElementById('shareModal').classList.add('show');});
+
+/* ===== INIT ===== */
+renderAll(); applyT();
 </script>
 </body>
 </html>
