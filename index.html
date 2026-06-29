@@ -51,8 +51,8 @@
   /* zoom viewport */
   .bv{position:relative; width:100%; aspect-ratio:1048/704; overflow:hidden; border-radius:14px; touch-action:none; cursor:grab; background:rgba(255,255,255,.18)}
   .bv.drag{cursor:grabbing}
-  .bvstage{position:absolute; inset:0; transform-origin:0 0; will-change:transform}
-  #bracketSvg{width:100%; height:100%; display:block; overflow:visible}
+  .bvstage{position:absolute; top:0; left:0; transform-origin:0 0; will-change:transform}
+  #bracketSvg{width:1048px; height:704px; display:block; overflow:visible}
   .zoomctl{position:absolute; top:10px; right:10px; display:flex; flex-direction:column; gap:6px; z-index:5}
   .zoomctl button{width:34px;height:34px; font-family:var(--pixel); font-size:18px; border:2px solid var(--ink); background:#fffdf7;
     border-radius:9px; cursor:pointer; box-shadow:2px 2px 0 rgba(70,55,38,.18); line-height:1}
@@ -307,8 +307,17 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{doc
 /* ===== ZOOM / PAN ===== */
 const bv=document.getElementById('bv'),stage=document.getElementById('bvstage');
 let zoom=1,px=0,py=0,drag=false,lastX=0,lastY=0;
-function applyT(){zoom=Math.max(1,Math.min(6,zoom));if(zoom===1){px=0;py=0;}const w=bv.clientWidth,h=bv.clientHeight;px=Math.min(0,Math.max(px,w-w*zoom));py=Math.min(0,Math.max(py,h-h*zoom));stage.style.transform=`translate(${px}px,${py}px) scale(${zoom})`;}
-function zoomAt(factor,cx,cy){const w=bv.clientWidth,h=bv.clientHeight;const ox=cx==null?w/2:cx,oy=cy==null?h/2:cy;const nz=Math.max(1,Math.min(6,zoom*factor));const k=nz/zoom;px=ox-(ox-px)*k;py=oy-(oy-py)*k;zoom=nz;applyT();}
+function applyT(){
+ zoom=Math.max(1,Math.min(6,zoom));
+ const w=bv.clientWidth,h=bv.clientHeight;
+ const eff=(w/1048)*zoom;
+ const cw=1048*eff, ch=704*eff;
+ px = cw<=w ? (w-cw)/2 : Math.min(0,Math.max(px, w-cw));
+ py = ch<=h ? (h-ch)/2 : Math.min(0,Math.max(py, h-ch));
+ stage.style.transform=`translate(${px}px,${py}px) scale(${eff})`;
+}
+function zoomAt(factor,cx,cy){const w=bv.clientWidth;const oldEff=(w/1048)*zoom;zoom=Math.max(1,Math.min(6,zoom*factor));const newEff=(w/1048)*zoom;const ox=cx==null?w/2:cx,oy=cy==null?bv.clientHeight/2:cy;const k=newEff/oldEff;px=ox-(ox-px)*k;py=oy-(oy-py)*k;applyT();}
+function defaultView(){const w=bv.clientWidth||0;const base=w/1048;/* on phones, open partly zoomed so tiles are readable; on wide screens this clamps to fit-whole */zoom=Math.max(1,Math.min(6,0.85/base));px=0;py=0;applyT();}
 document.querySelectorAll('.zoomctl button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const z=b.dataset.z;if(z==='in')zoomAt(1.35);else if(z==='out')zoomAt(1/1.35);else{zoom=1;px=0;py=0;applyT();}}));
 bv.addEventListener('wheel',e=>{e.preventDefault();const r=bv.getBoundingClientRect();const step=Math.min(Math.abs(e.deltaY),40)/40;const f=1+0.05*step;zoomAt(e.deltaY<0?f:1/f,e.clientX-r.left,e.clientY-r.top);},{passive:false});
 bv.addEventListener('pointerdown',e=>{if(e.target.closest('.zoomctl'))return;drag=true;bv.classList.add('drag');lastX=e.clientX;lastY=e.clientY;bv.setPointerCapture(e.pointerId);});
@@ -484,7 +493,7 @@ async function syncResults(){
 /* ===== AUTO-FRESHNESS =====
    GitHub Pages caches the HTML, so returning visitors can get a stale copy.
    This quietly checks for a newer build and reloads once when it finds one. */
-const BUILD='2026-06-29-valini-ladybug-1';  // bump this string on every deploy
+const BUILD='2026-06-29-mobile-default-zoom-3';  // bump this string on every deploy
 async function checkVersion(){
  try{
   const r=await fetch('./index.html?cb='+Date.now(),{cache:'no-store'});
@@ -499,7 +508,7 @@ async function checkVersion(){
   }
  }catch(e){}
 }
-renderAll(); applyT(); syncResults(); setInterval(syncResults, 120000);
+renderAll(); defaultView(); syncResults(); setInterval(syncResults, 120000);
 setTimeout(checkVersion, 8000); setInterval(checkVersion, 180000);
 </script>
 </body>
