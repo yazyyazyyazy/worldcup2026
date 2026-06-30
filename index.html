@@ -7,6 +7,14 @@
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
 <title>World Cup '26</title>
+<link rel="manifest" href="manifest.webmanifest"/>
+<meta name="theme-color" content="#BCE4F5"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="WC '26"/>
+<link rel="apple-touch-icon" href="icon-180.png"/>
+<link rel="icon" type="image/png" href="icon-192.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -144,6 +152,13 @@
   .btn.primary{background:var(--coral); color:#fff; border-color:var(--coral2)}
   .steprow{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
   @media(max-width:560px){ .logo{font-size:24px} }
+  .a2hs{position:fixed; left:12px; right:12px; bottom:-120px; z-index:60; display:flex; align-items:center; gap:10px; padding:11px 13px; border-radius:16px; background:rgba(255,253,247,.97); border:2px solid var(--line); box-shadow:0 10px 30px rgba(70,55,38,.22); backdrop-filter:blur(6px); transition:bottom .35s cubic-bezier(.2,.8,.2,1); font-family:var(--body)}
+  .a2hs.show{bottom:14px}
+  .a2hs #a2hsTxt{flex:1; font-size:14px; font-weight:700; color:var(--ink); line-height:1.25}
+  .a2hs #a2hsTxt b{color:var(--coral2)}
+  .a2hsbtn{font-family:var(--pixel); font-size:14px; font-weight:600; color:#fff; background:linear-gradient(180deg,var(--coral),var(--coral2)); border:none; border-radius:11px; padding:8px 16px; cursor:pointer; white-space:nowrap}
+  .a2hsx{background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer; padding:4px 6px; line-height:1}
+  @media(min-width:560px){ .a2hs{left:auto; right:18px; max-width:380px} }
 </style>
 </head>
 <body>
@@ -389,6 +404,10 @@ function distroLine(mid,a,b){
   const pool=[`rare moment of peace, everyone's on ${T}`,`no notes, all ${n} said ${T}`,`the one thing we agree on: ${T}`,`all ${n} said ${T}, the prophecy is real`,`we agreed on something. log it. screenshot it. it won't happen again.`,`everyone's on ${T} so naturally they're about to lose 4-0`];
   return pool[seed%pool.length];}
  if(small.p.length===1&&big.p.length>=2){const S=small.p[0].name,ST=TEAMS[small.t],CT=TEAMS[big.t];
+  if(small.p[0].id==='p_maame' && isUnderdog(small.t)){
+   const np=[`one ${ST} truther in this group and it's ${S}`,`not ${S} going rogue on us again`,`the rest of us said ${CT}. ${S}'s just built different`,`${S} put their whole heart on ${ST} and honestly? respect`,`${S} is the only one delusional enough to pick ${ST} and i fear they might be onto something`];
+   if(small.t==='CPV')np.push(`${S} fully believes Vozinha keeps another clean sheet (iconic behaviour, frankly)`);
+   return np[seed%np.length];}
   const pool=[`${S} you good? everyone said ${CT}`,`one ${ST} truther in this group and it's ${S}`,`${S} picking ${ST} to be different and it's not gonna work`,`not ${S} going rogue on us again`,`the rest of us said ${CT}. ${S}'s just built different (wrong)`,`${S} put their whole heart on ${ST} and honestly? respect, but no`,`${S} is the only one delusional enough to pick ${ST} and i fear they might be onto something`];
   if(small.t==='JPN')pool.push(`${S} trusting the japan coach's little notebook like it's the death note 📓`);
   if(small.t==='CPV')pool.push(`${S} fully believes Vozinha keeps another clean sheet (unwell behaviour)`);
@@ -489,7 +508,7 @@ function renderShare(){
  if(shareMode==='champs'){ const card=champCard();
    sh.innerHTML=`${close}<h2>The five champions</h2><div class="sub">One image with everyone's winner pick — saves for iMessage, stories, anywhere.</div><div class="preview">${card.svg}</div><div class="steprow"><button class="btn primary" id="dl">⤓ Save / share image</button><span id="shareStatus" class="savednote"></span></div>`;
    sh.querySelector('#dl').addEventListener('click',()=>exportCard(champCard(),sh.querySelector('#shareStatus'))); return; }
- const upcoming=knownUpcoming(), results=knownResults();
+ const upcoming=knownUpcoming(), results=knownResults().reverse();
  const list = shareMode==='res'?results:upcoming;
  if(!shareMid || !list.find(x=>x.matchId===shareMid)) shareMid = list.length?list[0].matchId:null;
  const card=buildShareCard();
@@ -497,7 +516,7 @@ function renderShare(){
  sh.innerHTML=`${close}<h2>Share a match card</h2>
   <div class="sub">A fun image for each match, with a one-liner about the tie and who in the group called it. The list grows automatically as games are played.</div>
   <div class="shareopts"><div class="so ${shareMode!=='res'?'sel':''}" data-m="up">📅 Upcoming (${upcoming.length})</div><div class="so ${shareMode==='res'?'sel':''}" data-m="res">⏱ Results (${results.length})</div></div>
-  <div class="pickwrap"><label class="picklabel">▼ Pick which match (defaults to what's next)</label>
+  <div class="pickwrap"><label class="picklabel">▼ Pick which match (${shareMode==='res'?'latest first':'defaults to what\'s next'})</label>
     <select id="selMatch" class="bigsel">${list.map(x=>`<option value="${x.matchId}" ${x.matchId===shareMid?'selected':''}>${optLabel(x)}</option>`).join('')||'<option>None yet — check back after kickoff</option>'}</select></div>
   ${card?`<div class="preview">${card.svg}</div><div class="steprow"><button class="btn primary" id="dl">⤓ Save / share image</button><span id="shareStatus" class="savednote"></span></div>`:`<div class="sub">No ${shareMode==='res'?'results':'matches'} here yet — they'll appear as the cup unfolds.</div>`}`;
  sh.querySelectorAll('.so').forEach(o=>o.addEventListener('click',()=>{shareMode=o.dataset.m;shareMid=null;renderShare();}));
@@ -524,7 +543,7 @@ async function syncResults(){
 /* ===== AUTO-FRESHNESS =====
    GitHub Pages caches the HTML, so returning visitors can get a stale copy.
    This quietly checks for a newer build and reloads once when it finds one. */
-const BUILD='2026-06-29-maame-noble-8';  // bump this string on every deploy
+const BUILD='2026-06-29-maame-kind-copy-11';  // bump this string on every deploy
 async function checkVersion(){
  try{
   const r=await fetch('./index.html?cb='+Date.now(),{cache:'no-store'});
@@ -541,6 +560,23 @@ async function checkVersion(){
 }
 renderAll(); defaultView(); syncResults(); setInterval(syncResults, 120000);
 setTimeout(checkVersion, 8000); setInterval(checkVersion, 180000);
+
+/* ===== ADD TO HOME SCREEN ===== */
+(function(){
+ const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+ if(standalone) return;
+ const bar=document.getElementById('a2hs'); if(!bar) return;
+ const txt=document.getElementById('a2hsTxt'), act=document.getElementById('a2hsBtn'), x=document.getElementById('a2hsX');
+ let deferred=null, dismissed=false;
+ const show=()=>{ if(!dismissed) bar.classList.add('show'); };
+ x.addEventListener('click',()=>{ dismissed=true; bar.classList.remove('show'); });
+ window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferred=e; txt.textContent="add WORLD CUP '26 to your home screen"; act.textContent='Install'; act.style.display=''; show(); });
+ act.addEventListener('click',async()=>{ if(deferred){ deferred.prompt(); try{ await deferred.userChoice; }catch(e){} deferred=null; bar.classList.remove('show'); } });
+ const ua=navigator.userAgent||'';
+ const isIOS=/iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+ if(isIOS){ txt.innerHTML="add to home screen: tap <b>Share</b> &#x2191; then <b>Add to Home Screen</b>"; act.style.display='none'; setTimeout(show, 1800); }
+})();
 </script>
+<div id="a2hs" class="a2hs"><span id="a2hsTxt">add WORLD CUP '26 to your home screen</span><button id="a2hsBtn" class="a2hsbtn">Install</button><button id="a2hsX" class="a2hsx" aria-label="dismiss">✕</button></div>
 </body>
 </html>
