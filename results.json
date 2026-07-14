@@ -1,5 +1,5 @@
 {
-  "updated": "Tue, 14 Jul 2026 20:09:09 GMT",
+  "updated": "Tue, 14 Jul 2026 21:15:31 GMT",
   "results": {
     "m3": "CAN",
     "m9": "BRA",
@@ -28,6 +28,7 @@
     "lq1": "FRA",
     "lq2": "ESP",
     "rq1": "ENG",
-    "rq2": "ARG"
+    "rq2": "ARG",
+    "lsf": "ESP"
   }
 }
